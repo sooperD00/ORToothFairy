@@ -1,4 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using ORToothFairy.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add database connection (EF Core + PostgreSQL)
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
