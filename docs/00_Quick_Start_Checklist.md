@@ -4,6 +4,14 @@
 
 ---
 
+## Quick Links
+
+- **Milestones:** https://github.com/sooperD00/ORToothFairy/milestones
+- **Issues:** https://github.com/sooperD00/ORToothFairy/issues
+- **Actions (CI/CD):** https://github.com/sooperD00/ORToothFairy/actions
+
+---
+
 ## ✅ Phase 1: Discovery (COMPLETE)
 - [x] Validated problem with domain expert (neighbor)
 - [x] Identified user profiles (patients, practitioners, admins)
@@ -27,7 +35,7 @@
 
 ---
 
-## 🔄 Phase 3: Legal & Business (NEXT)
+## 🔄 Phase 3: Legal & Business (Neighbor and Husband are mulling - suggestions seem good - revisit in Early December!)
 
 ### Immediate Actions
 - [ ] **Talk to lawyer husband** (1 hour)
@@ -35,18 +43,18 @@
   - LLC or contractor model?
   - Liability concerns?
   
-- [ ] **Discuss with neighbor** (30 min)
+- [x] **Discuss with neighbor** (30 min)
   - Ownership split (50/50 or other?)
   - Revenue split
   - Time commitments
   
-- [ ] **Decide on business structure**
+- [x] **Decide on business structure**
   - Option A: No entity (hobby project)
   - Option B: Join her LLC
-  - Option C: New LLC together ← probably best
+  - Option C: New LLC together ← we agree this is best
   - Option D: You as contractor
 
-### If Forming LLC
+### If Forming LLC - Cris will own, start in Dec
 - [ ] File Oregon LLC paperwork (~$100, online, 1 week)
 - [ ] Get EIN from IRS (free, 15 min online)
 - [ ] Open business bank account
@@ -63,10 +71,10 @@
 
 ---
 
-## 🚧 Phase 4: Build MVP (STARTING SOON)
+## 🚧 Phase 4: Build MVP (IN PARALLEL)
 
 ### Milestone 1: Project Setup (Week 1, ~8 hours)
-- [ ] Create GitHub repo (private for now)
+- [x] Create GitHub repo (building in public with MIT License because portfolio)
 - [ ] Set up solution structure (see `02_Requirements_And_Planning.md`)
 - [ ] Initialize .NET projects:
   ```bash
