@@ -75,18 +75,18 @@
 
 ### Milestone 1: Project Setup (Week 1, ~8 hours)
 - [x] Create GitHub repo (building in public with MIT License because portfolio)
-- [ ] Set up solution structure (see `02_Requirements_And_Planning.md`)
-- [ ] Initialize .NET projects:
+- [x] Set up solution structure (see `02_Requirements_And_Planning.md`)
+- [x] Initialize .NET projects:
   ```bash
   dotnet new webapi -n EDHSFinder.API
   dotnet new maui-blazor -n EDHSFinder.MAUI
   dotnet new classlib -n EDHSFinder.Core
   ```
-- [ ] Add Entity Framework Core NuGet packages
-- [ ] Set up PostgreSQL (local Docker or Railway)
-- [ ] Create database schema (run first migration)
-- [ ] Deploy "Hello World" API to Azure
-- [ ] **Deliverable:** Empty project that compiles and deploys
+- [x] Add Entity Framework Core NuGet packages
+- [x] Set up PostgreSQL (local Docker or Railway)
+- [x] Create database schema (run first migration)
+- [x] Deploy "Hello World" API to Azure
+- [x] **Deliverable:** Empty project that compiles and deploys
 
 ### Milestone 2: Core Search Logic (Week 2-3, ~20 hours)
 - [ ] Create `Practitioner` entity class
