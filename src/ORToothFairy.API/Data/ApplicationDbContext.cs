@@ -11,7 +11,8 @@ public class ApplicationDbContext : DbContext
     }
 
     // This property becomes the "practitioners" table in PostgreSQL
-    public DbSet<Practitioner> Practitioners { get; set; }
+    // virtual keyword lets Moq override this in tests
+    public virtual DbSet<Practitioner> Practitioners { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

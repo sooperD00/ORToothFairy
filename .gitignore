@@ -3,6 +3,10 @@
 # Private context/notes (not for public consumption)
 docs/CONTEXT_FOR_CLAUDE.md
 
+# Hidden to keep the railway DATABASE_PUBLIC_URL variable private
+appsettings.json
+appsettings.*.json
+
 ## Standard GitHub Visual Studio File
 ## -------------------------------------------
 ## Ignore Visual Studio temporary files, build results, and

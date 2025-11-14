@@ -89,12 +89,13 @@
 - [x] **Deliverable:** Empty project that compiles and deploys
 
 ### Milestone 2: Core Search Logic (Week 2-3, ~20 hours)
-- [ ] Create `Practitioner` entity class
-- [ ] Set up EF Core DbContext
-- [ ] Seed 10 test practitioners (CSV → database)
+- [x] Create `Practitioner` entity class
+- [x] Set up EF Core DbContext
+- [x] Write unit tests (entity tests - basic coverage)
+- [x] Seed 10 test practitioners (CSV → database)
 - [ ] Write search logic (distance calculation)
+- [ ] Write unit tests (search service - TDD style)
 - [ ] Create Search API endpoint
-- [ ] Write unit tests
 - [ ] **Deliverable:** API returns practitioners sorted by distance
 
 ### Milestone 3: Frontend Search UI (Week 3-4, ~20 hours)

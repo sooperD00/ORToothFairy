@@ -23,6 +23,11 @@ public class Practitioner
     public string? ZipCode { get; set; }
     public string? Website { get; set; }  // NEW - useful for practitioners
 
+    // Practitioner preferences
+    public int? MaxTravelMiles { get; set; } // Nullable - some may not specify
+    public bool AcceptsTexts { get; set; } = false;
+    public bool AcceptsCalls { get; set; } = true;  // Most will accept calls
+
     // Services offered (JSON array for flexibility)
     public string Services { get; set; } = "[]";
 
