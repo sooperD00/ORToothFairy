@@ -174,4 +174,71 @@ public class SearchServiceTests
         Assert.Single(results);  // Should only return Oregon practitioner
         Assert.Equal("Oregon", results[0].FirstName);
     }
+
+    [Fact]
+    public async Task SearchAsync_Should_Include_Practitioners_With_Null_MaxTravelMiles()
+    {
+        // Arrange - Practitioner with no travel limit set
+        var practitioners = new List<Practitioner>
+    {
+        new Practitioner
+        {
+            Id = 1,
+            FirstName = "Unlimited",
+            LastName = "Traveler",
+            Latitude = 45.7,  // ~15 miles away
+            Longitude = -122.9,
+            MaxTravelMiles = null,  // No limit!
+            IsActive = true,
+            State = "OR"
+        }
+    };
+
+        var mockDbSet = CreateMockDbSet(practitioners.AsQueryable());
+        var mockContext = new Mock<ApplicationDbContext>(
+            new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+        mockContext.Setup(c => c.Practitioners).Returns(mockDbSet.Object);
+
+        var searchService = new SearchService(mockContext.Object);
+
+        // Act
+        var results = await searchService.SearchAsync(45.5231, -122.6765, userSearchRadiusMiles: 20);
+
+        // Assert
+        Assert.Single(results);  // Should include practitioner even with null MaxTravelMiles
+        Assert.Equal("Unlimited", results[0].FirstName);
+    }
+
+    [Fact]
+    public async Task SearchAsync_Should_Return_Empty_When_No_Matches()
+    {
+        // Arrange - Practitioner too far away
+        var practitioners = new List<Practitioner>
+    {
+        new Practitioner
+        {
+            Id = 1,
+            FirstName = "Too",
+            LastName = "Far",
+            Latitude = 46.5,  // ~70 miles away
+            Longitude = -123.5,
+            MaxTravelMiles = 5,  // Won't travel that far
+            IsActive = true,
+            State = "OR"
+        }
+    };
+
+        var mockDbSet = CreateMockDbSet(practitioners.AsQueryable());
+        var mockContext = new Mock<ApplicationDbContext>(
+            new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+        mockContext.Setup(c => c.Practitioners).Returns(mockDbSet.Object);
+
+        var searchService = new SearchService(mockContext.Object);
+
+        // Act
+        var results = await searchService.SearchAsync(45.5231, -122.6765, userSearchRadiusMiles: 10);
+
+        // Assert
+        Assert.Empty(results);  // Should return empty list
+    }
 }
