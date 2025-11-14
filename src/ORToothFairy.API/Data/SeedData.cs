@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ORToothFairy.Core.Entities;
+using System.Collections.Generic;
 
 namespace ORToothFairy.API.Data;
 
@@ -33,7 +34,7 @@ public static class SeedData
                 ZipCode = "06604",
                 PracticeName = "Fones School of Dental Hygiene",
                 Website = "https://www.qu.edu/fones",
-                Services = "[\"Oral Prophylaxis\", \"Oral Hygiene Education\", \"Preventive Care\"]",
+                Services = new List<string> { "Oral Prophylaxis", "Oral Hygiene Education", "Preventive Care" },
                 IsActive = true
             },
 
@@ -52,7 +53,7 @@ public static class SeedData
                 ZipCode = "97124",
                 PracticeName = "Wilkins Dental Hygiene",
                 Website = "https://hillsboro-oregon.gov/library",
-                Services = "[\"Clinical Practice\", \"Evidence-Based Care\", \"Patient Education\"]",
+                Services = new List<string> { "Clinical Practice", "Evidence-Based Care", "Patient Education" },
                 IsActive = true
             },
 
@@ -71,7 +72,7 @@ public static class SeedData
                 ZipCode = "97201",
                 PracticeName = "OHSU Dental Clinic",
                 Website = "https://www.ohsu.edu/school-of-dentistry",
-                Services = "[\"General Dentistry\", \"Dental Education\", \"Community Outreach\"]",
+                Services = new List<string> { "General Dentistry", "Dental Education", "Community Outreach" },
                 IsActive = true
             },
 
@@ -90,7 +91,7 @@ public static class SeedData
                 ZipCode = "97401",
                 PracticeName = "The Tooth Book Dental Hygiene",
                 Website = "https://www.seussville.com",
-                Services = "[\"Pediatric Dental Care\", \"Children's Oral Health Education\", \"Preventive Care\"]",
+                Services = new List<string> { "Pediatric Dental Care", "Children's Oral Health Education", "Preventive Care" },
                 IsActive = true
             },
 
@@ -109,7 +110,7 @@ public static class SeedData
                 ZipCode = "97301",
                 PracticeName = "If You Brush Your Teeth Dental Clinic",
                 Website = "https://www.lauranumeroff.com",
-                Services = "[\"Pediatric Cleanings\", \"Cavity Prevention\", \"Nutritional Counseling\"]",
+                Services = new List<string> { "Pediatric Cleanings", "Cavity Prevention", "Nutritional Counseling" },
                 IsActive = true
             },
 
@@ -128,7 +129,7 @@ public static class SeedData
                 ZipCode = "97420",
                 PracticeName = "Petrie Tribal Dental Services",
                 Website = "https://www.ctclusi.org",
-                Services = "[\"Preventive Care\", \"Basic Restorations\", \"Community Health\"]",
+                Services = new List<string> { "Preventive Care", "Basic Restorations", "Community Health" },
                 IsActive = true
             },
 
@@ -147,7 +148,7 @@ public static class SeedData
                 ZipCode = "97045",
                 PracticeName = "You Have Died of Dysentery Dental Clinic",
                 Website = null,  // Pioneer dentist - no website!
-                Services = "[\"Emergency Extractions\", \"Pioneer Dental Care\", \"Gold Fillings\"]",
+                Services = new List<string> { "Emergency Extractions", "Pioneer Dental Care", "Gold Fillings" },
                 IsActive = true
             },
 
@@ -166,7 +167,7 @@ public static class SeedData
                 ZipCode = "97103",
                 PracticeName = "Sacket Coastal Dental",
                 Website = null,  // 1847 - definitely no website!
-                Services = "[\"Coastal Community Care\", \"Emergency Services\", \"General Dentistry\"]",
+                Services = new List<string> { "Coastal Community Care", "Emergency Services", "General Dentistry" },
                 IsActive = true
             },
 
@@ -185,7 +186,7 @@ public static class SeedData
                 ZipCode = "97703",
                 PracticeName = "Pickett Hygiene Education Center",
                 Website = "https://www.deschuteslibrary.org",
-                Services = "[\"Clinical Instruction\", \"Advanced Techniques\", \"Continuing Education\"]",
+                Services = new List<string> { "Clinical Instruction", "Advanced Techniques", "Continuing Education" },
                 IsActive = true
             },
 
@@ -204,7 +205,7 @@ public static class SeedData
                 ZipCode = "97801",
                 PracticeName = "Fones Prevention Clinic",
                 Website = "https://www.qu.edu/fones",
-                Services = "[\"Preventive Education\", \"Hygienist Training\", \"Community Outreach\"]",
+                Services = new List<string> { "Preventive Education", "Hygienist Training", "Community Outreach" },
                 IsActive = true
             }
         };

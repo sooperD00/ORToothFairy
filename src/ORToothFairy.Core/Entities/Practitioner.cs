@@ -28,8 +28,8 @@ public class Practitioner
     public bool AcceptsTexts { get; set; } = false;
     public bool AcceptsCalls { get; set; } = true;  // Most will accept calls
 
-    // Services offered (JSON array for flexibility)
-    public string Services { get; set; } = "[]";
+    // Services offered
+    public List<string> Services { get; set; } = new();
 
     // Admin fields
     public bool IsActive { get; set; } = true;

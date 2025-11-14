@@ -15,7 +15,7 @@ public class PractitionerTests
         Assert.Equal(0, practitioner.Id);
         Assert.Equal(string.Empty, practitioner.FirstName);
         Assert.Equal(string.Empty, practitioner.Email);
-        Assert.Equal("[]", practitioner.Services);
+        Assert.Empty(practitioner.Services);
         Assert.Equal("OR", practitioner.State);  // Default to Oregon
         Assert.True(practitioner.IsActive);
         Assert.NotEqual(DateTime.MinValue, practitioner.CreatedAt);
@@ -38,7 +38,7 @@ public class PractitionerTests
             City = "Bridgeport",
             State = "CT",  // Not Oregon - useful for filtering tests later
             ZipCode = "06604",
-            Services = "[\"Oral Prophylaxis\", \"Oral Hygiene Education\", \"Preventive Care\"]",
+            Services = new List<string> { "Oral Prophylaxis", "Oral Hygiene Education", "Preventive Care" },
             PracticeName = "Fones School of Dental Hygiene"
         };
 
@@ -70,7 +70,7 @@ public class PractitionerTests
             City = "Portland",
             State = "OR",
             ZipCode = "97201",
-            Services = "[\"Clinical Practice\", \"Evidence-Based Care\", \"Patient Education\"]",
+            Services = new List<string> { "Clinical Practice", "Evidence-Based Care", "Patient Education" },
             PracticeName = "Wilkins Dental Hygiene"
         };
 

@@ -10,4 +10,5 @@ public class PractitionerSearchResult
     public bool AcceptsCalls { get; set; }
     public string? Email { get; set; }
     public double UserPractitionerProximityMiles { get; set; }
+    public List<string> Services { get; set; } = new();
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ORToothFairy.Core.Entities;
+using System.Text.Json;
 
 namespace ORToothFairy.API.Data;
 
@@ -18,12 +19,21 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Index on lat/lon for faster distance queries
-        modelBuilder.Entity<Practitioner>()
-            .HasIndex(p => new { p.Latitude, p.Longitude });
+        modelBuilder.Entity<Practitioner>(entity =>
+        {
+            // Index on lat/lon for faster distance queries
+            entity.HasIndex(p => new { p.Latitude, p.Longitude });
 
-        // Index on IsActive (we'll filter by this a lot)
-        modelBuilder.Entity<Practitioner>()
-            .HasIndex(p => p.IsActive);
+            // Index on IsActive (we'll filter by this a lot)
+            entity.HasIndex(p => p.IsActive);
+
+            // Configure Services as JSONB column with automatic serialization
+            entity.Property(p => p.Services)
+                .HasColumnType("jsonb")
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+                    v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null!) ?? new List<string>()
+                );
+        });
     }
 }

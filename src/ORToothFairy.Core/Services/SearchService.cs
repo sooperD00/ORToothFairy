@@ -1,17 +1,19 @@
-using Microsoft.EntityFrameworkCore;
-using ORToothFairy.API.Data;
 using ORToothFairy.Core.Entities;
 using ORToothFairy.Core.Models;
+using ORToothFairy.Core.Repositories;
 
-namespace ORToothFairy.API.Services;
+namespace ORToothFairy.Core.Services;
 
-public class SearchService
+/// <summary>
+/// Implementation of search service for finding EDHS practitioners
+/// </summary>
+public class SearchService : ISearchService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IPractitionerRepository _repository;
 
-    public SearchService(ApplicationDbContext context)
+    public SearchService(IPractitionerRepository repository)
     {
-        _context = context;
+        _repository = repository;
     }
 
     public async Task<List<PractitionerSearchResult>> SearchAsync(
@@ -19,11 +21,10 @@ public class SearchService
         double userLon,
         int? userSearchRadiusMiles = null)
     {
-        // Get all active practitioners
-        var practitioners = await _context.Practitioners
-            .Where(p => p.IsActive)
-            .Where(p => p.State == "OR") // Limit to Oregon for now
-            .ToListAsync();
+        // Get all active practitioners from repository
+        // (Repository handles the database query - Core doesn't care how)
+        // Limit to "OR" state for this implementation
+        var practitioners = await _repository.GetActivePractitionersAsync("OR");
 
         // Calculate distances and filter based on user and practitioner preferences
         var results = practitioners
