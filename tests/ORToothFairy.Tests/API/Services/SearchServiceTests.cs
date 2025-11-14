@@ -84,4 +84,94 @@ public class SearchServiceTests
 
         return mockSet;
     }
+
+    [Fact]
+    public async Task SearchAsync_Should_Filter_Out_Inactive_Practitioners()
+    {
+        // Arrange
+        var practitioners = new List<Practitioner>
+    {
+        new Practitioner
+        {
+            Id = 1,
+            FirstName = "Active",
+            LastName = "Jane",
+            Latitude = 45.5231,
+            Longitude = -122.6765,
+            MaxTravelMiles = 10,
+            IsActive = true,
+            State = "OR"
+        },
+        new Practitioner
+        {
+            Id = 2,
+            FirstName = "Inactive",
+            LastName = "Bob",
+            Latitude = 45.5232,
+            Longitude = -122.6766,
+            MaxTravelMiles = 10,
+            IsActive = false,  // Inactive!
+            State = "OR"
+        }
+    };
+
+        var mockDbSet = CreateMockDbSet(practitioners.AsQueryable());
+        var mockContext = new Mock<ApplicationDbContext>(
+            new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+        mockContext.Setup(c => c.Practitioners).Returns(mockDbSet.Object);
+
+        var searchService = new SearchService(mockContext.Object);
+
+        // Act
+        var results = await searchService.SearchAsync(45.5231, -122.6765);
+
+        // Assert
+        Assert.Single(results);  // Should only return Active Jane
+        Assert.Equal("Active", results[0].FirstName);
+    }
+
+    [Fact]
+    public async Task SearchAsync_Should_Filter_Out_NonOregon_Practitioners()
+    {
+        // Arrange
+        var practitioners = new List<Practitioner>
+    {
+        new Practitioner
+        {
+            Id = 1,
+            FirstName = "Oregon",
+            LastName = "Hygienist",
+            Latitude = 45.5231,
+            Longitude = -122.6765,
+            MaxTravelMiles = 10,
+            IsActive = true,
+            State = "OR"  // Oregon
+        },
+        new Practitioner
+        {
+            Id = 2,
+            FirstName = "Washington",
+            LastName = "Hygienist",
+            Latitude = 45.6,
+            Longitude = -122.7,
+            MaxTravelMiles = 10,
+            IsActive = true,
+            State = "WA"  // Not Oregon!
+        }
+    };
+
+        var mockDbSet = CreateMockDbSet(practitioners.AsQueryable());
+        var mockContext = new Mock<ApplicationDbContext>(
+            new DbContextOptionsBuilder<ApplicationDbContext>().Options);
+        mockContext.Setup(c => c.Practitioners).Returns(mockDbSet.Object);
+
+        var searchService = new SearchService(mockContext.Object);
+
+        // Act
+        var results = await searchService.SearchAsync(45.5231, -122.6765);
+
+        // Assert
+        Assert.Single(results);  // Should only return Oregon practitioner
+        Assert.Equal("Oregon", results[0].FirstName);
+    }
 }

@@ -22,6 +22,7 @@ public class SearchService
         // Get all active practitioners
         var practitioners = await _context.Practitioners
             .Where(p => p.IsActive)
+            .Where(p => p.State == "OR") // Limit to Oregon for now
             .ToListAsync();
 
         // Calculate distances and filter based on user and practitioner preferences
