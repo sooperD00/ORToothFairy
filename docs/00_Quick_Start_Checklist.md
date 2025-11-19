@@ -124,6 +124,8 @@
 ### Milestone 6: Polish & Deploy (Week 7-8, ~15 hours)
 - [ ] Error handling & loading states
 - [ ] Responsive design polish
+- [ ] Add integration tests
+- [ ] Check the Spinner in the UI while "waiting"
 - [ ] Performance testing
 - [ ] Write README & API docs
 - [ ] Deploy to production (Azure)

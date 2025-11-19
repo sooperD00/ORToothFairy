@@ -330,3 +330,276 @@ GET /api/search?address=123 Main St, Portland OR
 - Build search page with 3 input methods
 - Display results list
 - Call Search API from app
+
+---
+
+## Milestone 3: Frontend Search UI ✅ (Completed Nov 18, 2024)
+
+### What We Built
+- ✅ Created Search page (MAUI Blazor component) with 3 input methods
+- ✅ Implemented SearchService (MAUI) to call API via HttpClient
+- ✅ Added geolocation with permission handling (GPS button)
+- ✅ Built distance filter dropdown with dynamic re-search
+- ✅ Integrated loading states (spinner) and error messages
+- ✅ Made contact info tappable (tel: and mailto: links)
+- ✅ Styled with responsive CSS (mobile-first design)
+- ✅ Fixed database connection issues (Railway multi-project confusion)
+- ✅ Resolved API/MAUI parameter naming mismatches
+
+### Key Files Created/Modified
+```
+src/
+├── ORToothFairy.MAUI/
+│   ├── Components/Pages/
+│   │   └── Search.razor               (main search UI)
+│   ├── Services/
+│   │   └── SearchService.cs           (HTTP client wrapper)
+│   ├── wwwroot/css/
+│   │   └── search.css                 (custom styling)
+│   └── MauiProgram.cs                 (DI registration, HttpClient config)
+└── ORToothFairy.API/
+    └── appsettings.Development.json   (Railway connection string fix)
+```
+
+### Key Decisions
+
+**1. MAUI Blazor Hybrid (not native XAML)**
+- **Why:** Single codebase for web + iOS + Android, uses familiar HTML/CSS/C#
+- **Trade-off:** Slightly less "native feel" than pure XAML, but faster development
+- **Benefit:** Razor syntax allows mixing C# logic directly in markup (`@if`, `@foreach`)
+
+**2. HttpClient Dependency Injection**
+- **Pattern:** Registered via `AddHttpClient<SearchService>()` in MauiProgram
+- **Why:** Proper lifetime management, avoids socket exhaustion
+- **Configuration:** Base URL set to API endpoint (localhost for dev, Azure for prod)
+
+**3. Distance Filter Implementation (Re-search vs Client-side Filter)**
+- **Decision:** Re-call API with new distance parameter (not filter cached results)
+- **Why:** Ensures fresh data, respects practitioner MaxTravelMiles, simpler state management
+- **Implementation:** Dropdown triggers `OnDistanceChanged()` → re-runs last search
+
+**4. Geolocation Strategy**
+- **Desktop (Windows):** No GPS available, button shows error message
+- **Mobile (iOS/Android):** Requests permission, gets device coordinates
+- **Testing approach:** Use zip/address on desktop, test GPS on actual devices later
+
+**5. Parameter Naming Convention (userSearchRadiusMiles)**
+- **Problem:** Had `maxDistanceMiles` (MAUI) vs `distanceMiles` (API) mismatch
+- **Solution:** Standardized on `userSearchRadiusMiles` across all layers
+- **Lesson:** API query params must match `[FromQuery]` parameter names exactly
+
+### Architecture Pattern: MAUI App Structure
+
+**Component Hierarchy:**
+```
+App.razor (root)
+  └── Routes.razor (routing)
+      └── MainLayout.razor (shell with nav)
+          └── Search.razor (page)
+              ├── Input section (3 methods)
+              ├── Distance filter dropdown
+              ├── Loading spinner
+              ├── Results list
+              └── Empty state messages
+```
+
+**Data Flow:**
+```
+User clicks "Search by Zip"
+  ↓
+Search.razor calls SearchByZip()
+  ↓
+SearchService.SearchByZipCodeAsync()
+  ↓
+HttpClient GET to API
+  ↓
+API returns SearchResponse JSON
+  ↓
+Deserialize to List<PractitionerSearchResult>
+  ↓
+Razor renders results in foreach loop
+```
+
+### Lessons Learned
+
+**1. Razor Syntax (@ symbol)**
+- `@variable` → Insert C# value into HTML
+- `@if (condition) { }` → Conditional rendering
+- `@foreach (var x in list) { }` → Loop rendering
+- `@code { }` → C# class members (fields, methods)
+- **Key insight:** It's just C# in HTML, not a separate templating language
+
+**2. Blazor Component Lifecycle**
+- `StateHasChanged()` → Force UI re-render after async operations
+- `@bind` → Two-way data binding (input field ↔ C# variable)
+- `@bind:after` → Callback after binding updates (used for dropdown)
+- **Gotcha:** Async methods need manual `StateHasChanged()` in some cases
+
+**3. JSON Deserialization Patterns**
+- API returns `{ results: [...], count: 5 }` wrapper object
+- Created `SearchResultWrapper` class to deserialize wrapper
+- Extracted `.Results` list for component use
+- **Lesson:** DTO shape must match JSON structure exactly (case-insensitive helps)
+
+**4. HttpClient Configuration**
+- Must configure `BaseAddress` in DI registration
+- Query params build URL string manually (no magic helper)
+- `Uri.EscapeDataString()` required for address input (handles spaces/special chars)
+- **Gotcha:** Forgot to add `using ORToothFairy.MAUI.Services;` for DI
+
+**5. CSS in Blazor**
+- Place CSS in `wwwroot/css/` folder
+- Reference in `<head>` of layout or page
+- **Mobile-first approach:** Base styles for mobile, `@media` queries for desktop
+- **Accessibility:** Used semantic HTML (`<label>`, `<button>`, ARIA roles)
+
+### Gotchas / Troubleshooting
+
+**Problem:** "Column p.AcceptsCalls does not exist" database error  
+**Solution:** Database schema out of sync - needed fresh migration with new columns
+
+**Problem:** MAUI app shows results but API logs show 0 rows in database  
+**Root cause:** API connected to old Railway project (`romantic-harmony`), DBeaver connected to new project (`ortooth-dev`)  
+**Solution:** Updated `appsettings.Development.json` with correct Railway connection string
+
+**Problem:** Distance filter always showed all 9 practitioners regardless of selection  
+**Root cause:** API parameter named `userSearchRadiusMiles`, MAUI sending `maxDistanceMiles`  
+**Solution:** Changed MAUI URLs to use `userSearchRadiusMiles` to match API `[FromQuery]` parameter
+
+**Problem:** "The JSON value could not be converted to List<PractitionerSearchResult>"  
+**Root cause:** API returns `{ results: [...] }` wrapper, MAUI expected array directly  
+**Solution:** Created `SearchResultWrapper` class to deserialize outer object first
+
+**Problem:** Migrations failing with "relation Practitioners already exists"  
+**Solution:** Manually dropped tables in DBeaver, re-ran migrations from clean slate
+
+**Problem:** "Unable to create DbContext" error with `dotnet ef database update`  
+**Root cause:** `appsettings.Development.json` had malformed JSON (missing `"DefaultConnection":` key)  
+**Solution:** Fixed JSON syntax, verified with DBeaver connection test
+
+### UI/UX Patterns Implemented
+
+**Loading States:**
+- Spinner with "Searching for practitioners..." text
+- Shows during API calls
+- Hides when results/errors arrive
+
+**Error Handling:**
+- Permission denied → "Enable location access in settings"
+- Invalid zip → "Please enter valid 5-digit zip code"
+- No results + filter active → "Try widening your search"
+- No results + "All" selected → "Contact union for assistance"
+
+**Empty States:**
+- Before first search: Shows input options only
+- After search with 0 results: Contextual message based on filter
+
+**Contact Interactions:**
+- Phone: `href="tel:503-555-1234"` → Opens dialer on mobile
+- Email: `href="mailto:jane@example.com"` → Opens mail app
+- Both styled as tappable buttons (large touch targets)
+
+### CSS Architecture
+
+**Design System:**
+- Primary color: `#3498db` (blue - trust, healthcare)
+- Secondary: `#95a5a6` (gray - neutral actions)
+- Success: `#27ae60` (green - results found)
+- Error: `#f8d7da` (light red - warnings)
+- Font: System fonts (`-apple-system, BlinkMacSystemFont, Segoe UI`)
+
+**Components:**
+- `.search-container` → Max width 600px, centered
+- `.input-group` → Stacked inputs with labels
+- `.btn-primary` / `.btn-secondary` → Full-width, touch-friendly
+- `.practitioner-card` → Shadow, rounded corners, padding
+- `.spinner` → Pure CSS animation (no images/libraries)
+
+**Responsive Design:**
+- Mobile-first base styles
+- Touch targets minimum 44px (iOS guidelines)
+- No horizontal scroll on small screens
+
+### Testing Strategy (Manual)
+
+**Test Matrix Completed:**
+| Input Method | Distance | Expected Results | Status |
+|--------------|----------|------------------|--------|
+| Zip 97124    | 5 miles  | 1 practitioner   | ✅ Pass |
+| Zip 97124    | 25 miles | 3 practitioners  | ✅ Pass |
+| Zip 97124    | 50 miles | 4 practitioners  | ✅ Pass |
+| Address "123 Main St, Portland OR" | 25 miles | 3 practitioners | ✅ Pass |
+| GPS (desktop) | Any | Permission error | ✅ Expected |
+
+**Distance Accuracy Verified:**
+- Esther Wilkins: 4.3-4.4 miles (Hillsboro)
+- Herbert Miller: 12.8-13.4 miles (Portland)
+- E.H. Griffen: 18.8-19.8 miles (Oregon City)
+
+### Performance Notes
+
+**API Response Times (localhost):**
+- Zip code search: ~400ms (includes Nominatim geocoding)
+- Address search: ~300ms
+- Direct lat/lon: ~200ms (no geocoding needed)
+
+**UI Rendering:**
+- Spinner barely visible (too fast on localhost)
+- Will be more apparent on production Azure + mobile networks
+
+**Optimization Opportunities (deferred to later):**
+- Cache geocoding results (same zip → skip API call)
+- Debounce dropdown changes (wait 300ms before re-search)
+- Virtualize long result lists (if >50 practitioners)
+
+### Deployment Considerations
+
+**Environment Configuration:**
+```csharp
+#if DEBUG
+    client.BaseAddress = new Uri("http://localhost:5167/");
+#else
+    client.BaseAddress = new Uri("https://ortoothfairy-api.azurewebsites.net/");
+#endif
+```
+
+**Next Steps for Production:**
+- Update MAUI app with Azure API URL
+- Enable HTTPS on Railway (not required for dev)
+- Test on actual iOS/Android devices (GPS, permissions)
+- Submit to app stores (requires Apple/Google dev accounts)
+
+### What We Shipped
+
+**Functional Requirements Met:**
+✅ Search by GPS location (with graceful desktop fallback)  
+✅ Search by zip code (5-digit validation)  
+✅ Search by full address (handles spaces/special chars)  
+✅ Distance filtering (5/10/25/50/All miles)  
+✅ Results sorted by proximity  
+✅ Tappable phone/email links  
+✅ Loading states  
+✅ Error messages  
+✅ Empty states with helpful guidance  
+
+**Portfolio Value:**
+- Cross-platform app (web + mobile from single codebase)
+- Clean architecture (UI → API → Database)
+- Real-world async operations (HTTP, geolocation, permissions)
+- Responsive design with CSS
+- Error handling and user feedback
+- Professional git commit history
+
+### Time Spent
+~6 hours (planned 20 hours)
+- Included: Full UI implementation, extensive debugging (database connection, parameter mismatch), Railway configuration
+- Debugging breakdown: 2 hours on Railway multi-project issue, 1 hour on parameter naming
+- Efficiency gains: Paired programming with Claude for troubleshooting, incremental testing
+
+### What's Next
+**Milestone 4:** Maps Integration (Optional)
+- Display practitioners on interactive map
+- Click pins to see details
+- Visual distance representation
+
+**OR:** Skip to Milestone 5 (Admin Tools) if maps aren't essential for MVP
