@@ -1,4 +1,4 @@
-# Discovery Phase - EDHS Finder Project
+# Discovery Phase - EDHS Finder Project -> OR Tooth Fairy Project
 
 **Date Started:** October 25, 2025  
 **Status:** Complete  

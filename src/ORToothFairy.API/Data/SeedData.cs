@@ -9,7 +9,9 @@ public static class SeedData
     public static async Task SeedPractitioners(ApplicationDbContext context)
     {
         // Check if we already have practitioners (don't seed twice)
-        if (await context.Practitioners.AnyAsync())
+        var count = await context.Practitioners.CountAsync();
+        Console.WriteLine($"Found {count} practitioners in database");
+        if (count > 0)
         {
             Console.WriteLine("Database already seeded. Skipping...");
             return;

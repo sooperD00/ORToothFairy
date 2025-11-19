@@ -1,10 +1,23 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using ORToothFairy.API.Data;
 using ORToothFairy.API.Repositories;
 using ORToothFairy.Core.Repositories;
 using ORToothFairy.Core.Services;
 
+// This is a web app
 var builder = WebApplication.CreateBuilder(args);
+
+// CORS policy to allow MAUI app access
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMAUI", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -43,6 +56,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Make sure CORS is enabled
+// add BEFORE app.UseHttpsRedirection();
+// tighten to Azure-deployed app's URL on publish; `AllowAnyOrigin()` is fine for local dev
+app.UseCors("AllowMAUI");  
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

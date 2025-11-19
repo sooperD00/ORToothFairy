@@ -1,4 +1,4 @@
-# Legal & Business Setup Phase - EDHS Finder Project
+# Legal & Business Setup Phase - EDHS Finder Project -> OR Tooth Fairy Project
 
 **Phase Status:** Next Up  
 **Previous Phase:** [Requirements & Planning](02_Requirements_And_Planning.md)  

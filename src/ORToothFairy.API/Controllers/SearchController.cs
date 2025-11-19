@@ -25,7 +25,7 @@ public class SearchController : ControllerBase
     /// <param name="longitude">Direct longitude (use with latitude)</param>
     /// <param name="zipCode">US zip code (5 digits)</param>
     /// <param name="address">Full address (street, city, state)</param>
-    /// <param name="distanceMiles">Filter by distance (5, 10, 20, or null for all)</param>
+    /// <param name="userSearchRadiusMiles">Filter by distance (5, 10, 20, or null for all)</param>
     /// <returns>List of practitioners sorted by distance</returns>
     [HttpGet]
     public async Task<IActionResult> Search(
@@ -33,7 +33,7 @@ public class SearchController : ControllerBase
         [FromQuery] double? longitude,
         [FromQuery] string? zipCode,
         [FromQuery] string? address,
-        [FromQuery] int? distanceMiles)
+        [FromQuery] int? userSearchRadiusMiles)
     {
         double lat, lon;
         string? locationUsed = null;
@@ -96,20 +96,14 @@ public class SearchController : ControllerBase
         }
 
         // STEP 2: Validate distance filter (if provided)
-        if (distanceMiles.HasValue)
+        if (userSearchRadiusMiles.HasValue && userSearchRadiusMiles.Value <= 0)
         {
-            var validDistances = new[] { 5, 10, 20 };
-            if (!validDistances.Contains(distanceMiles.Value))
-            {
-                return BadRequest(new
-                {
-                    error = "Distance must be 5, 10, or 20 miles (or omit for all results)"
-                });
-            }
+            return BadRequest(new { error = "Distance must be greater than 0" });
         }
 
         // STEP 3: Call YOUR existing SearchService
-        var results = await _searchService.SearchAsync(lat, lon, distanceMiles);
+        Console.WriteLine($"[Controller] Calling SearchService with userSearchRadiusMiles={userSearchRadiusMiles}");
+        var results = await _searchService.SearchAsync(lat, lon, userSearchRadiusMiles);
 
         // STEP 4: Build response with metadata
         var response = new SearchResponse
@@ -117,7 +111,7 @@ public class SearchController : ControllerBase
             Results = results,
             Count = results.Count,
             SearchLocation = locationUsed,
-            DistanceFilter = distanceMiles
+            DistanceFilter = userSearchRadiusMiles
         };
 
         return Ok(response);

@@ -21,10 +21,16 @@ public class SearchService : ISearchService
         double userLon,
         int? userSearchRadiusMiles = null)
     {
+        Console.WriteLine($"[SearchService] Received search request:");
+        Console.WriteLine($"  User location: ({userLat}, {userLon})");
+        Console.WriteLine($"  Distance filter: {userSearchRadiusMiles?.ToString() ?? "NULL (show all)"}");
+
         // Get all active practitioners from repository
         // (Repository handles the database query - Core doesn't care how)
         // Limit to "OR" state for this implementation
         var practitioners = await _repository.GetActivePractitionersAsync("OR");
+
+        Console.WriteLine($"[SearchService] Found {practitioners.Count} practitioners in OR");
 
         // Calculate distances and filter based on user and practitioner preferences
         var results = practitioners
@@ -33,7 +39,11 @@ public class SearchService : ISearchService
                 Practitioner = p,
                 Distance = CalculateDistance(userLat, userLon, p.Latitude, p.Longitude)
             })
-            .Where(x => userSearchRadiusMiles == null || x.Distance <= userSearchRadiusMiles.Value)
+            .Where(x => {
+                var passesDistanceFilter = userSearchRadiusMiles == null || x.Distance <= userSearchRadiusMiles.Value;
+                Console.WriteLine($"  {x.Practitioner.FirstName} {x.Practitioner.LastName}: {x.Distance:F1} miles - Filter: {passesDistanceFilter}");
+                return passesDistanceFilter;
+            })
             .Where(x => x.Practitioner.MaxTravelMiles == null || x.Distance <= x.Practitioner.MaxTravelMiles.Value)
             .OrderBy(x => x.Distance)
             .Select(x => new PractitionerSearchResult

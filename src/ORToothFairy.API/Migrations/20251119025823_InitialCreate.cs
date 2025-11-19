@@ -24,13 +24,19 @@ namespace ORToothFairy.API.Migrations
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Latitude = table.Column<double>(type: "double precision", nullable: false),
                     Longitude = table.Column<double>(type: "double precision", nullable: false),
-                    BusinessName = table.Column<string>(type: "text", nullable: true),
+                    PracticeName = table.Column<string>(type: "text", nullable: true),
                     Address = table.Column<string>(type: "text", nullable: true),
                     City = table.Column<string>(type: "text", nullable: true),
+                    State = table.Column<string>(type: "text", nullable: false),
                     ZipCode = table.Column<string>(type: "text", nullable: true),
-                    Services = table.Column<string>(type: "text", nullable: false),
+                    Website = table.Column<string>(type: "text", nullable: true),
+                    MaxTravelMiles = table.Column<int>(type: "integer", nullable: true),
+                    AcceptsTexts = table.Column<bool>(type: "boolean", nullable: false),
+                    AcceptsCalls = table.Column<bool>(type: "boolean", nullable: false),
+                    Services = table.Column<string>(type: "jsonb", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

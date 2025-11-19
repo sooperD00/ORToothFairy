@@ -52,7 +52,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: -122.6,
                 zipCode: null,
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -103,7 +103,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: "97006",
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -154,7 +154,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: null,
                 address: "123 Main St, Portland OR",
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -181,7 +181,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: -122.6,
                 zipCode: null,
                 address: null,
-                distanceMiles: distanceMiles);
+                userSearchRadiusMiles: distanceMiles);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -215,7 +215,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: -122.6,
                 zipCode: null,
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -235,7 +235,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: null,
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -260,7 +260,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: lon,
                 zipCode: null,
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -281,7 +281,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: "00000",
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -306,7 +306,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: null,
                 address: "Fake Address That Does Not Exist",
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -329,7 +329,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: -122.6,
                 zipCode: null,
                 address: null,
-                distanceMiles: invalidDistance);
+                userSearchRadiusMiles: invalidDistance);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -367,7 +367,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: null,
                 zipCode: "97006",
                 address: "123 Main St, Portland OR", // This should be ignored
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -391,7 +391,7 @@ namespace ORToothFairy.Tests.Controllers
                 longitude: -122.6,
                 zipCode: "97006", // This should be ignored
                 address: null,
-                distanceMiles: null);
+                userSearchRadiusMiles: null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);

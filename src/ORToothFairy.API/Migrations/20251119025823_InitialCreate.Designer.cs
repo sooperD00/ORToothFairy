@@ -12,8 +12,8 @@ using ORToothFairy.API.Data;
 namespace ORToothFairy.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251113062903_AddContactPreferences")]
-    partial class AddContactPreferences
+    [Migration("20251119025823_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,7 @@ namespace ORToothFairy.API.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("MaxTravelDistanceMiles")
+                    b.Property<int?>("MaxTravelMiles")
                         .HasColumnType("integer");
 
                     b.Property<string>("Phone")
@@ -81,7 +81,7 @@ namespace ORToothFairy.API.Migrations
 
                     b.Property<string>("Services")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("State")
                         .IsRequired()

@@ -1,4 +1,4 @@
-# EDHS Finder - Quick Start Checklist
+# EDHS Finder -> OR Tooth Fairy - Quick Start Checklist
 
 **Your roadmap from idea → deployed app**
 
@@ -38,23 +38,25 @@
 ## 🔄 Phase 3: Legal & Business (Neighbor and Husband are mulling - suggestions seem good - revisit in Early December!)
 
 ### Immediate Actions
-- [ ] **Talk to lawyer husband** (1 hour)
-  - Conflict of interest for neighbor?
-  - LLC or contractor model?
-  - Liability concerns?
+- [x] **Talk to lawyer husband** (1 hour)
+  - Conflict of interest for neighbor? yes
+  - LLC or contractor model? LLC for Nicole only
+  - [ ] Liability concerns? still open question, unlikely
+  - Cris cannot self-deal, she is happy to just help out, she works for the union anyway
   
 - [x] **Discuss with neighbor** (30 min)
-  - Ownership split (50/50 or other?)
-  - Revenue split
-  - Time commitments
+  - Ownership split - Nicole 100%
+  - Revenue split - 60/40 with 40 going to hillsboro oral health foundation
+  -[ ] Time commitments - TBD
   
 - [x] **Decide on business structure**
   - Option A: No entity (hobby project)
   - Option B: Join her LLC
-  - Option C: New LLC together ← we agree this is best
+  - Option C: New LLC together
   - Option D: You as contractor
+  - [X] Option E: Nicole as sole LLC ← we agree this is best
 
-### If Forming LLC - Cris will own, start in Dec
+### If Forming LLC - Nicole own, start after positive feedback on MVP from union members
 - [ ] File Oregon LLC paperwork (~$100, online, 1 week)
 - [ ] Get EIN from IRS (free, 15 min online)
 - [ ] Open business bank account
@@ -78,9 +80,9 @@
 - [x] Set up solution structure (see `02_Requirements_And_Planning.md`)
 - [x] Initialize .NET projects:
   ```bash
-  dotnet new webapi -n EDHSFinder.API
-  dotnet new maui-blazor -n EDHSFinder.MAUI
-  dotnet new classlib -n EDHSFinder.Core
+  dotnet new webapi -n ORToothFairy.API
+  dotnet new maui-blazor -n ORToothFairy.MAUI
+  dotnet new classlib -n ORToothFairy.Core
   ```
 - [x] Add Entity Framework Core NuGet packages
 - [x] Set up PostgreSQL (local Docker or Railway)
@@ -93,25 +95,24 @@
 - [x] Set up EF Core DbContext
 - [x] Write unit tests (entity tests - basic coverage)
 - [x] Seed 10 test practitioners (CSV → database)
-- [ ] Write search logic (distance calculation)
-- [ ] Write unit tests (search service - TDD style)
-- [ ] Create Search API endpoint
-- [ ] **Deliverable:** API returns practitioners sorted by distance
+- [x] Write search logic (distance calculation)
+- [x] Write unit tests (search service - TDD style)
+- [x] Create Search API endpoint
+- [x] **Deliverable:** API returns practitioners sorted by distance
 
 ### Milestone 3: Frontend Search UI (Week 3-4, ~20 hours)
-- [ ] Build Search page (MAUI Blazor)
-- [ ] Add 3 input types (geolocation, zip, address)
-- [ ] Call Search API from app
-- [ ] Display results in list
-- [ ] Add distance filter dropdown
-- [ ] Make phone/email tappable
-- [ ] **Deliverable:** Working app that finds practitioners
+- [x] Build Search page (MAUI Blazor)
+- [x] Add 3 input types (geolocation, zip, address)
+- [x] Call Search API from app
+- [x] Display results in list
+- [x] Add distance filter dropdown
+- [x] Make phone/email tappable
+- [x] **Deliverable:** Working app that finds practitioners
 
 ### Milestone 4: Maps Integration (Week 5, ~15 hours)
 - [ ] Integrate Mapbox or Google Maps SDK
 - [ ] Show practitioners on map (pins)
 - [ ] Click pin → show details
-- [ ] Add geocoding (address → lat/lon)
 - [ ] **Deliverable:** Map view works
 
 ### Milestone 5: Admin Tools (Week 6, ~10 hours)
@@ -161,12 +162,12 @@
 ### Local Development
 ```bash
 # Run API locally
-cd src/EDHSFinder.API
+cd src/ORToothFairy.API
 dotnet run
 # Runs on https://localhost:5001
 
 # Run MAUI app
-cd src/EDHSFinder.MAUI
+cd src/ORToothFairy.MAUI
 dotnet build -t:Run -f net8.0-android  # Android
 dotnet build -t:Run -f net8.0-ios      # iOS (Mac only)
 ```
@@ -174,13 +175,13 @@ dotnet build -t:Run -f net8.0-ios      # iOS (Mac only)
 ### Database Migrations
 ```bash
 # Create new migration
-dotnet ef migrations add MigrationName --project src/EDHSFinder.API
+dotnet ef migrations add MigrationName --project src/ORToothFairy.API
 
 # Apply migrations
-dotnet ef database update --project src/EDHSFinder.API
+dotnet ef database update --project src/ORToothFairy.API
 
 # Seed test data
-psql -U postgres -d edhsfinder -f scripts/seed-data.sql
+psql -U postgres -d ortoothfairy -f scripts/seed-data.sql
 ```
 
 ### Testing
@@ -198,7 +199,7 @@ dotnet test /p:CollectCoverage=true
 dotnet publish -c Release
 
 # Deploy to Azure (via GitHub Actions, or manual)
-az webapp up --name edhsfinder-api --resource-group edhsfinder-rg
+az webapp up --name ortoothfairy-api --resource-group ortoothfairy-rg
 ```
 
 ---

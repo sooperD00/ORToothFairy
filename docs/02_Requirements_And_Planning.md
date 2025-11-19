@@ -1,4 +1,4 @@
-# Requirements & Planning Phase - EDHS Finder Project
+# Requirements & Planning Phase - EDHS Finder Project -> OR Tooth Fairy Project
 
 **Phase Status:** In Progress  
 **Previous Phase:** [Discovery](01_Discovery.md) ✅  
@@ -395,13 +395,13 @@ Get basic usage statistics (for future dashboard).
 ## Project Structure ("Leave Room For" Scaffolding)
 
 ```
-EDHSFinder/
+ORToothFairy/
 ├── README.md                          # High-level project overview
 ├── .gitignore                         # Standard .NET gitignore
-├── EDHSFinder.sln                     # Solution file
+├── ORToothFairy.sln                     # Solution file
 │
 ├── src/
-│   ├── EDHSFinder.API/                # ASP.NET Core Web API
+│   ├── ORToothFairy.API/                # ASP.NET Core Web API
 │   │   ├── Controllers/
 │   │   │   ├── SearchController.cs
 │   │   │   ├── PractitionersController.cs
@@ -416,7 +416,7 @@ EDHSFinder/
 │   │   ├── appsettings.json
 │   │   └── Program.cs
 │   │
-│   ├── EDHSFinder.Core/               # Shared domain logic
+│   ├── ORToothFairy.Core/               # Shared domain logic
 │   │   ├── Entities/
 │   │   │   ├── Practitioner.cs
 │   │   │   ├── SearchLog.cs
@@ -424,7 +424,7 @@ EDHSFinder/
 │   │   ├── Interfaces/                # Repository patterns
 │   │   └── Constants/
 │   │
-│   └── EDHSFinder.MAUI/               # .NET MAUI + Blazor app
+│   └── ORToothFairy.MAUI/               # .NET MAUI + Blazor app
 │       ├── Pages/
 │       │   ├── Search.razor           # Search page
 │       │   ├── Results.razor          # Results list
@@ -438,8 +438,8 @@ EDHSFinder/
 │       └── wwwroot/                   # CSS, images
 │
 ├── tests/
-│   ├── EDHSFinder.API.Tests/          # API unit tests
-│   └── EDHSFinder.Core.Tests/         # Domain logic tests
+│   ├── ORToothFairy.API.Tests/          # API unit tests
+│   └── ORToothFairy.Core.Tests/         # Domain logic tests
 │
 ├── docs/
 │   ├── 01_Discovery.md                # This file
@@ -599,22 +599,22 @@ This directory documents features that are architecturally supported but not yet
 ### Local Development Setup
 ```bash
 # Clone repo
-git clone https://github.com/yourusername/EDHSFinder.git
-cd EDHSFinder
+git clone https://github.com/yourusername/ORToothFairy.git
+cd ORToothFairy
 
 # Restore packages
 dotnet restore
 
 # Set up database (update connection string in appsettings.json)
-dotnet ef database update --project src/EDHSFinder.API
+dotnet ef database update --project src/ORToothFairy.API
 
 # Run API locally
-cd src/EDHSFinder.API
+cd src/ORToothFairy.API
 dotnet run
 # API runs on https://localhost:5001
 
 # Run MAUI app (separate terminal)
-cd src/EDHSFinder.MAUI
+cd src/ORToothFairy.MAUI
 dotnet build -t:Run -f net8.0-android
 # Or -f net8.0-ios, or -f net8.0-windows
 ```
@@ -624,7 +624,7 @@ dotnet build -t:Run -f net8.0-android
 # appsettings.Development.json (local only, not committed)
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=edhsfinder;Username=postgres;Password=yourpassword"
+    "DefaultConnection": "Host=localhost;Database=ortooth-dev;Username=postgres;Password=yourpassword"
   },
   "MapboxApiKey": "your-mapbox-key-here",
   "GoogleMapsApiKey": "your-google-key-here"
