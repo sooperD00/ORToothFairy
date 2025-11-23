@@ -131,6 +131,103 @@
 - [ ] Note V2.0 features while you remember them like 1) filter by practitioner services, 2) integrate number of miles practitioner willing to travel into search return logic, 3) feedback on list return fairness
 - [ ] **Deliverable:** A UI that will inspire adoption by Practitioners and Clients
 
+
+# Milestone 4: Client Profile UI Implementation
+
+**Goal:** Build a flexible, profile-driven search UI that supports three page categories (Individuals/Families, B2B, Need Help) with configurable client profiles using EF Core entities.
+
+## Architecture Changes
+
+### New Entities
+- [ ] Create `ClientProfile.cs` entity with properties:
+  - [ ] Id (primary key)
+  - [ ] HeadlineName (string) - brief profile name
+  - [ ] ExpandedDescription (string) - education text shown on accordion expand
+  - [ ] PageCategory (string) - "IndividualsAndFamilies", "B2B", or "NeedHelp"
+  - [ ] DisplayOrder (int) - sort order within page
+  - [ ] IsActive (bool) - show/hide for demos
+  - [ ] DefaultSearchType (string) - "Geolocation", "Address", or "Zip"
+  - [ ] HighlightColor (string) - hex color for gentle box around suggested search
+  - [ ] ShowRadiusOption (bool)
+  - [ ] DefaultRadiusMiles (int?)
+  - [ ] UserStoryIds (string) - comma-delimited for documentation mapping
+
+- [ ] Add `ClientProfile` DbSet to ApplicationDbContext
+- [ ] Create and run migration for ClientProfile table
+
+### Seed Data
+- [ ] Create seed data for Individuals/Families page profiles
+  - [ ] Profile 1: Basic individual search (geolocation default)
+  - [ ] Profile 2: Care home resident visit variant (address default)
+- [ ] Create seed data for B2B page profiles
+  - [ ] Care facilities coordinator profile
+  - [ ] Dentist office staffing profile
+- [ ] Create seed data for Need Help page profiles
+  - [ ] Community health center navigation profile
+- [ ] Apply seed data in migration or DbContext OnModelCreating
+
+## UI Components
+
+### Page Structure
+- [ ] Create three pages/routes:
+  - [ ] `/search` or `/` - Individuals and Families
+  - [ ] `/business` - B2B
+  - [ ] `/help` - Need Help
+- [ ] Each page filters ClientProfiles by PageCategory
+- [ ] Each page orders profiles by DisplayOrder where IsActive = true
+
+### Accordion Component
+- [ ] Create ClientProfileAccordion component
+  - [ ] Displays HeadlineName as collapsed header
+  - [ ] Expands to show ExpandedDescription on click
+  - [ ] Sets active profile state when clicked
+  - [ ] Visual indicator for currently selected profile
+
+### Search Component
+- [ ] Reusable Search component (shared across all three pages)
+- [ ] Three search input options always visible:
+  - [ ] "Use my location" button (geolocation)
+  - [ ] Zip code input field
+  - [ ] Address input field
+- [ ] Apply gentle highlight box (using profile's HighlightColor) around DefaultSearchType option
+- [ ] Show radius selector if ShowRadiusOption = true, default to DefaultRadiusMiles
+- [ ] On profile selection, update search defaults automatically
+
+### Results Display
+- [ ] Practitioner card component for results
+- [ ] Order results by distance (closest first)
+- [ ] Display 2-3 service tags/icons per practitioner (no filter yet)
+- [ ] Cards show: name, distance, services, contact info
+
+### Navigation
+- [ ] Hamburger menu with links:
+  - [ ] About page (includes FAQ)
+  - [ ] Oregon Dental Hygienists Association (external)
+  - [ ] OR Oral Health podcast (external)
+  - [ ] Contact page
+  - [ ] Legal page
+
+## Testing & Polish
+- [ ] Test profile swapping on each page
+- [ ] Verify search defaults change based on selected profile
+- [ ] Test distance ordering in results
+- [ ] Responsive design check (mobile, tablet, desktop)
+- [ ] Color contrast check for HighlightColor boxes
+- [ ] Demo mode: toggle IsActive flags to show different profile combinations
+
+## Nice-to-Haves (Post-MVP)
+- Service filter UI
+- UserStories entity table (if comma-delimited becomes unwieldy)
+- SearchPreferencesJson for complex future preferences
+- Profile analytics tracking
+
+---
+
+**Estimated Time:** 2-3 days
+- Day 1: Entity setup, migrations, seed data, basic accordion (4-6 hrs)
+- Day 2: Search component wiring, profile state management, results display (4-6 hrs)
+- Day 3: Navigation, polish, testing profile combinations (3-4 hrs)
+
 ### Milestone 5: Admin Tools (Week 6, ~10 hours)
 - [?] Create CSV upload script (command-line is fine) - **rethink this**
   - this needs to be re-considered in the design, because it will likely be me and not Cris, so table for now, but redesign soon, maybe not before MVP show-off and first feedbacks though, but as time allows while waiting for feedback
