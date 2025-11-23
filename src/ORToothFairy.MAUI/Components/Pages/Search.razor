@@ -70,7 +70,7 @@
         </div>
     }
 
-    <!-- Results List -->
+    <!-- Results List (Practitioner Card) -->
     @if (!isLoading && results != null && results.Any())
     {
         <div class="results-list">
@@ -79,9 +79,18 @@
             @foreach (var practitioner in results)
             {
                 <div class="practitioner-card">
+                    <!-- Name -->
                     <h3>@practitioner.FirstName @practitioner.LastName</h3>
+                    
+                    <!-- Distance -->
                     <p class="distance">📍 @practitioner.UserPractitionerProximityMiles.ToString("F1") miles away</p>
 
+                    <!-- Get Directions -->
+                    <button @onclick="() => OpenMaps(practitioner)">
+                        📍 Get Directions
+                    </button>
+
+                    <!-- Phone/email -->
                     <div class="contact-info">
                         @if (!string.IsNullOrEmpty(practitioner.Phone))
                         {
@@ -97,6 +106,7 @@
                         }
                     </div>
 
+                    <!-- Services -->
                     @if (practitioner.Services != null && practitioner.Services.Any())
                     {
                         <p class="services">Services: @string.Join(", ", practitioner.Services)</p>
@@ -299,5 +309,18 @@
             await SearchByAddress();
         }
         // Add lastLat/lastLon tracking if you want to support location re-search
+    }
+
+    private async Task OpenMaps(PractitionerSearchResult p)
+    {
+        try
+        {
+            // iOS will open Apple Maps, Android opens Google Maps
+            await Launcher.OpenAsync($"https://maps.google.com/?daddr={p.Latitude},{p.Longitude}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Couldn't open maps for {p.Address}: {ex.Message}";
+        }
     }
 }

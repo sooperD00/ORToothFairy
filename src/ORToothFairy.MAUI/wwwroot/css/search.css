@@ -221,8 +221,25 @@
     margin-bottom: 20px;
 }
 
-    .error-message p {
-        color: #721c24;
-        margin: 0;
-        font-weight: 500;
-    }
+.error-message p {
+    color: #721c24;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Directions Button */
+.directions-button {
+    background-color: #4285f4; /* Google Maps blue */
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.directions-button:hover {
+    background-color: #357ae8;
+}

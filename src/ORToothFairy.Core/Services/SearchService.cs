@@ -48,6 +48,7 @@ public class SearchService : ISearchService
             .OrderBy(x => x.Distance)
             .Select(x => new PractitionerSearchResult
             {
+                // Practitioner "card"
                 PractitionerId = x.Practitioner.Id,
                 FirstName = x.Practitioner.FirstName,
                 LastName = x.Practitioner.LastName,
@@ -55,7 +56,14 @@ public class SearchService : ISearchService
                 Email = x.Practitioner.Email,
                 AcceptsTexts = x.Practitioner.AcceptsTexts,
                 AcceptsCalls = x.Practitioner.AcceptsCalls,
-                UserPractitionerProximityMiles = x.Distance
+                UserPractitionerProximityMiles = x.Distance,
+                
+                // For Map Directions
+                Latitude = x.Practitioner.Latitude,
+                Longitude = x.Practitioner.Longitude,
+                Address = x.Practitioner.Address,
+                City = x.Practitioner.City,
+                ZipCode = x.Practitioner.ZipCode
             })
             .ToList();
 
@@ -63,7 +71,7 @@ public class SearchService : ISearchService
     }
 
     // Haversine formula: calculates distance between two lat/lon points
-    private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+    private static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
     {
         const double earthRadiusMiles = 3959.0; // Earth's radius in miles
 
@@ -81,7 +89,7 @@ public class SearchService : ISearchService
         return earthRadiusMiles * c;
     }
 
-    private double DegreesToRadians(double degrees)
+    private static double DegreesToRadians(double degrees)
     {
         return degrees * Math.PI / 180.0;
     }

@@ -1,6 +1,6 @@
-# EDHS Finder -> OR Tooth Fairy - Quick Start Checklist
+# OR Tooth Fairy - Quick Start Checklist
 
-**Your roadmap from idea → deployed app**
+**Roadmap: idea → deployed app (~8 Weeks!)**
 
 ---
 
@@ -13,13 +13,16 @@
 ---
 
 ## ✅ Phase 1: Discovery (COMPLETE)
-- [x] Validated problem with domain expert (neighbor)
-- [x] Identified user profiles (patients, practitioners, admins)
+- [x] Validated problem with domain expert (Cris Bowerman - ED for Oregon Dental Hygenists Association)
+- [x] Identified user profiles:
+  - clients: direct patients, B2B (care facilities), dentist offices
+  - practitioners: any dental hygienist in OR (EDHS and not EDHS as well)
+  - admins: Nicole
 - [x] Defined MVP scope (search + display, no admin panel yet)
 - [x] Chose tech stack (.NET MAUI + ASP.NET Core)
 - [x] Documented in `01_Discovery.md`
 
-**Key Decision:** Build native apps from start (MAUI) for better portfolio + neighbor's preference.
+**Key Decision:** Build native apps from start (MAUI) for better portfolio + Cris's best guess at user preference.
 
 ---
 
@@ -28,52 +31,62 @@
 - [x] Designed database schema (practitioners, search_logs)
 - [x] Mapped API endpoints
 - [x] Created project structure with "leave room for" scaffolding
-- [x] Set milestones (8 weeks, 80-120 hours)
+- [x] Set milestones (8 weeks, 100 hours)
 - [x] Documented in `02_Requirements_And_Planning.md`
 
 **Key Decision:** PostgreSQL + PostGIS for geospatial queries, EF Core for ORM.
 
 ---
 
-## 🔄 Phase 3: Legal & Business (Neighbor and Husband are mulling - suggestions seem good - revisit in Early December!)
+## 🔄 Phase 3: Legal & Business (Nov-Dec)
 
-### Immediate Actions
-- [x] **Talk to lawyer husband** (1 hour)
-  - Conflict of interest for neighbor? yes
-  - LLC or contractor model? LLC for Nicole only
-  - [ ] Liability concerns? still open question, unlikely
-  - Cris cannot self-deal, she is happy to just help out, she works for the union anyway
-  
-- [x] **Discuss with neighbor** (30 min)
-  - Ownership split - Nicole 100%
-  - Revenue split - 60/40 with 40 going to hillsboro oral health foundation
-  -[ ] Time commitments - TBD
-  
-- [x] **Decide on business structure**
-  - Option A: No entity (hobby project)
-  - Option B: Join her LLC
-  - Option C: New LLC together
-  - Option D: You as contractor
-  - [X] Option E: Nicole as sole LLC ← we agree this is best
+### Roles and Responsibilites (Nov)
+- **Cris**
+  - Cris had the idea but cannot monetize - COI self dealing
+  - She is happy as ED of Oregon Dental Hygienists Association
+  - She is passionate about oral health care in Hillsboro and OR
+  - Her financial portion can go to a foundation for local oral healthcare - Cris will set that up, Nicole will contribute 30-40% after costs covered
 
-### If Forming LLC - Nicole own, start after positive feedback on MVP from union members
-- [ ] File Oregon LLC paperwork (~$100, online, 1 week)
+- **Nicole**
+  - [x] Business structure = Nicole as sole LLC
+  - [ ] ⚖️ Liability concerns?
+  - [ ] Finish MVP (~Nov/Dec)
+  - [ ] Get Practitioner feedback (Dec)
+  - [ ] Get advice from local SBDC in (~Dec/Jan)
+
+### Meet with SBDC (Dec)
+ - [ ] Advice on LLC
+ - [ ] Advice on Legal
+ - [ ] Advice on Taxes
+ - [ ] Advice on Parterns/board/paying advisors/???
+ - [ ] Advice on Liability concerns
+ - [ ] Get Lawyer and Accountant recs
+
+### Form LLC (Dec/Jan)
+- [ ] If positive feedback on MVP?
+- [ ] File Oregon LLC paperwork (~$100, online, 1 week (~Dec/Jan))
 - [ ] Get EIN from IRS (free, 15 min online)
-- [ ] Open business bank account
-- [ ] Draft operating agreement (lawyer can help)
+- [ ] Open business bank account (Jan)
+- [ ] ⚖️ Draft operating agreement (Jan)
 
-### Legal Docs (Regardless of Structure)
-- [ ] Write Terms of Service (use template, customize)
-- [ ] Write Privacy Policy (use template, customize)
-- [ ] Get lawyer to review (optional but smart)
+### Legal Docs (Jan)
+- [ ] ⚖️ Write Terms of Service (use template, customize)
+- [ ] ⚖️ Write Privacy Policy (use template, customize)
 
-**Timeline:** 1-3 weeks depending on LLC decision
+### Bring to Lawyer (Jan)
+- [ ] ⚖️ Liability concerns?
+- [ ] ⚖️ Draft operating agreement (Jan)
+- [ ] ⚖️ Write Terms of Service (use template, customize)
+- [ ] ⚖️ Write Privacy Policy (use template, customize)
 
-**See:** `03_Legal_Business_Setup.md` for details
+### Taxes (Feb?)
+
+
+**See:** `03_Legal_Business_Setup.md` for details **todo: this needs update**
 
 ---
 
-## 🚧 Phase 4: Build MVP (IN PARALLEL)
+## 🚧 Phase 4: Build MVP (Nov-Dec)
 
 ### Milestone 1: Project Setup (Week 1, ~8 hours)
 - [x] Create GitHub repo (building in public with MIT License because portfolio)
@@ -109,25 +122,32 @@
 - [x] Make phone/email tappable
 - [x] **Deliverable:** Working app that finds practitioners
 
-### Milestone 4: Maps Integration (Week 5, ~15 hours)
-- [ ] Integrate Mapbox or Google Maps SDK
-- [ ] Show practitioners on map (pins)
-- [ ] Click pin → show details
-- [ ] **Deliverable:** Map view works
+### Milestone 4: UI/UX (Week 5, ~15 hours)
+- [x] Integrate link to open address in Maps
+- [ ] Create 4 (or however many) client profiles (probably in Core?)
+- [ ] "Give an ask" to a new user to move them past friction
+- [ ] (Optional): remember a client's last "profile" and select that on return
+- [ ] Polish the Practitioner "card" in the UI (nice box, services offered, make it actually look like a nice business card (but not too much bc it's the web))
+- [ ] Note V2.0 features while you remember them like 1) filter by practitioner services, 2) integrate number of miles practitioner willing to travel into search return logic, 3) feedback on list return fairness
+- [ ] **Deliverable:** A UI that will inspire adoption by Practitioners and Clients
 
 ### Milestone 5: Admin Tools (Week 6, ~10 hours)
-- [ ] Create CSV upload script (command-line is fine)
+- [?] Create CSV upload script (command-line is fine) - **rethink this**
+  - this needs to be re-considered in the design, because it will likely be me and not Cris, so table for now, but redesign soon, maybe not before MVP show-off and first feedbacks though, but as time allows while waiting for feedback
 - [ ] Add search logging to database
 - [ ] Create basic stats query (even if not displayed)
-- [ ] **Deliverable:** Admin can add practitioners via CSV
+- [ ] **Deliverable:** Admin can add practitioners via ***undecided interface bc now it's for Nicole to manage, not Cris***
 
 ### Milestone 6: Polish & Deploy (Week 7-8, ~15 hours)
 - [ ] Error handling & loading states
 - [ ] Responsive design polish
 - [ ] Add integration tests
 - [ ] Check the Spinner in the UI while "waiting"
+- [ ] Fix plural on MAUI razor "1 practitioner**s** found"
+- [ ] make sure you have 6 decimals for the lat/lon for accuracy within 1cm
+- [ ] show "Accepts Calls", "Accepts Texts", and "Services" list in UI results
 - [ ] Performance testing
-- [ ] Write README & API docs
+- [ ] Write README & API docs - this is a real project now, not a portfolio project. The "learnings" have to go - I want it 100% professional but also good and readable documentation for myself and all those --verbose engineers who are allowed to sit at my lunch table but who also can't sit through lunch (or read a novel of a document) because there's more fun stuff to do - it's a tight balance
 - [ ] Deploy to production (Azure)
 - [ ] Submit to app stores (if ready)
 - [ ] **Deliverable:** Production v1.0 live!
@@ -139,7 +159,7 @@
 - [ ] Get 5-10 test practitioners to try it
 - [ ] Collect feedback
 - [ ] Fix bugs
-- [ ] Market to union members (neighbor's job)
+- [ ] Market to "Oregon Dental Hygenists Association" members (with Cris)
 - [ ] Monitor usage stats
 - [ ] Plan v2 features based on data
 
@@ -250,7 +270,7 @@ az webapp up --name ortoothfairy-api --resource-group ortoothfairy-rg
 - Use PostGIS `ST_Distance` if doing complex queries
 
 ### Where to Ask for Help
-1. **Claude** (that's me! I can debug code, explain concepts)
+1. **Claude** (debug code, explain concepts)
 2. **Stack Overflow** (search first, 90% of questions answered)
 3. **.NET Discord/Reddit** (r/dotnet, r/csharp)
 4. **MAUI GitHub Issues** (if you hit a framework bug)
@@ -272,7 +292,7 @@ az webapp up --name ortoothfairy-api --resource-group ortoothfairy-rg
 ### Learning Success (Career Growth)
 - ✅ Comfortable with .NET MAUI
 - ✅ Can architect & deploy production apps
-- ✅ Portfolio piece that gets you interviews
+- ✅ Portfolio piece that gets interviews
 
 ---
 
@@ -298,14 +318,4 @@ az webapp up --name ortoothfairy-api --resource-group ortoothfairy-rg
 
 ## Your Next Action (Right Now)
 
-**Step 1:** Talk to lawyer husband (1 hour this week)  
-**Step 2:** Talk to neighbor about ownership split (30 min)  
-**Step 3:** Decide on LLC or not (by end of week)  
-**Step 4:** Set up GitHub repo (30 min)  
-**Step 5:** Start Milestone 1 (project setup)
-
----
-
-**Remember:** Deploy early, deploy often. Get something in her hands ASAP, even if imperfect. You can always iterate!
-
-🚀 **You got this!**
+**Step 1:** Deliver, baby, deliver
