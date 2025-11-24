@@ -11,14 +11,18 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // This property becomes the "practitioners" table in PostgreSQL
+    // This property becomes the "practitioners" or "clientprofiles" table in PostgreSQL
     // virtual keyword lets Moq override this in tests
     public virtual DbSet<Practitioner> Practitioners { get; set; }
+    public virtual DbSet<ClientProfile> ClientProfiles { get; set; }
+    public virtual DbSet<ProfilePage> ProfilePages { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // Indexes and configurations for Practitioner
         modelBuilder.Entity<Practitioner>(entity =>
         {
             // Index on lat/lon for faster distance queries
@@ -34,6 +38,27 @@ public class ApplicationDbContext : DbContext
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null!) ?? new List<string>()
                 );
+        });
+
+        // Indexes for ClientProfile
+        modelBuilder.Entity<ClientProfile>(entity =>
+        {
+            entity.HasIndex(cp => cp.PageCategory);
+            entity.HasIndex(cp => cp.IsActive);
+            entity.HasIndex(cp => new { cp.PageCategory, cp.DisplayOrder });
+        });
+
+        // Indexes and relationships for ProfilePage
+        modelBuilder.Entity<ProfilePage>(entity =>
+        {
+            entity.HasIndex(pp => pp.IsActive);
+            entity.HasIndex(pp => pp.DisplayOrder);
+
+            // Configure the one-to-many relationship
+            entity.HasMany(pp => pp.ClientProfiles)
+                .WithOne()
+                .HasForeignKey(cp => cp.ProfilePageId)
+                .OnDelete(DeleteBehavior.Restrict); // Don't cascade delete profiles if page is deleted
         });
     }
 }
