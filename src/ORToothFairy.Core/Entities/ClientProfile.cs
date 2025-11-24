@@ -24,8 +24,7 @@ public class ClientProfile
     public int DefaultRadiusMiles { get; set; } = 25; // null or 5, 10, 25, etc.
 
     // Organization & filtering
-    public string PageCategory { get; set; } = string.Empty; // "IndividualsAndFamilies", "B2B"
-    public int DisplayOrder { get; set; } = 0; // Sort order within page category
+    public int DisplayOrder { get; set; } = 9999; // Sort order within page category
     public bool IsActive { get; set; } = false; // Toggle visibility for demos
 
     // Documentation mapping (keeping it simple for portfolio purposes)

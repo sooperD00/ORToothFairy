@@ -43,9 +43,8 @@ public class ApplicationDbContext : DbContext
         // Indexes for ClientProfile
         modelBuilder.Entity<ClientProfile>(entity =>
         {
-            entity.HasIndex(cp => cp.PageCategory);
             entity.HasIndex(cp => cp.IsActive);
-            entity.HasIndex(cp => new { cp.PageCategory, cp.DisplayOrder });
+            entity.HasIndex(cp => new { cp.ProfilePageId, cp.DisplayOrder });
         });
 
         // Indexes and relationships for ProfilePage

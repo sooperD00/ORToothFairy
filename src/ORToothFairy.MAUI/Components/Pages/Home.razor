@@ -1,5 +1,44 @@
-﻿@page "/Home"
+﻿@page "/"
+@using ORToothFairy.Core.Entities
 
-<h1>Hello, world!</h1>
+<div class="landing-container">
+    <h1>Find The Right Dental Hygienist For Your Needs</h1>
+    
+    <div class="profile-pages">
+        @foreach (var pp in profilePages)
+        {
+            <div class="profile-page-card" @onclick="() => SelectPage(pp)">
+                <img src="@pp.StockPhotoUrl" alt="@pp.DisplayName" />
+                <h2>@pp.DisplayName</h2>
+            </div>
+        }
+    </div>
+    
+    @if (selectedPage != null)
+    {
+        <div class="client-profiles">
+            <!-- Client profiles accordion will go here -->
+        </div>
+        
+        <div class="search-section">
+            <!-- Search component will go here -->
+        </div>
+    }
+</div>
 
-Welcome to your new app.
+@code {
+    private List<ProfilePage> profilePages = new();
+    private ProfilePage? selectedPage;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Fetch profilePages from API
+        // For now, empty list
+    }
+    
+    private void SelectPage(ProfilePage pp)
+    {
+        selectedPage = pp;
+        StateHasChanged();
+    }
+}

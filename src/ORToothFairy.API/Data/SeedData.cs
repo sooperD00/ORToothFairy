@@ -244,7 +244,7 @@ public static class SeedData
             DefaultSearchType = "Geolocation",
             ShowRadiusOption = true,
             DefaultRadiusMiles = 25,
-            PageCategory = "IndividualsAndFamilies",
+            ProfilePageId = 1,  // IndividualsAndFamilies
             DisplayOrder = 1,
             IsActive = true,
             UserStoryIds = "US-001,US-002"
@@ -262,7 +262,7 @@ public static class SeedData
             DefaultSearchType = "Address",
             ShowRadiusOption = true,
             DefaultRadiusMiles = 10,
-            PageCategory = "IndividualsAndFamilies",
+            ProfilePageId = 1,  // IndividualsAndFamilies
             DisplayOrder = 2,
             IsActive = true,
             UserStoryIds = "US-003,US-004"
@@ -280,7 +280,7 @@ public static class SeedData
             DefaultSearchType = "Zip",
             ShowRadiusOption = true,
             DefaultRadiusMiles = 50,
-            PageCategory = "IndividualsAndFamilies",
+            ProfilePageId = 1,  // IndividualsAndFamilies
             DisplayOrder = 1,
             IsActive = true,
             UserStoryIds = "US-005,US-006,US-007"
@@ -298,8 +298,8 @@ public static class SeedData
             DefaultSearchType = "Address",
             ShowRadiusOption = true,
             DefaultRadiusMiles = 25,
-            PageCategory = "B2B",
-            DisplayOrder = 1,
+            ProfilePageId = 2,  // B2B
+            DisplayOrder = 1,  
             IsActive = true,
             UserStoryIds = "US-008,US-009"
         },
@@ -316,7 +316,7 @@ public static class SeedData
             DefaultSearchType = "Geolocation",
             ShowRadiusOption = true,
             DefaultRadiusMiles = 15,
-            PageCategory = "B2B",
+            ProfilePageId = 2,  // B2B
             DisplayOrder = 2,
             IsActive = true,
             UserStoryIds = "US-010,US-011"
@@ -334,7 +334,7 @@ public static class SeedData
             DefaultSearchType = "Contact",
             ShowRadiusOption = false,
             DefaultRadiusMiles = 0,
-            PageCategory = "B2B",
+            ProfilePageId = 2,  // B2B
             DisplayOrder = 3,
             IsActive = true,
             UserStoryIds = "US-012"
