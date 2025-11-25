@@ -123,89 +123,74 @@
 - [x] **Deliverable:** Working app that finds practitioners
 
 ### Milestone 4: UI/UX (Week 5, ~15 hours)
-- [x] Integrate link to open address in Maps
-- [ ] Create 4 (or however many) client profiles (probably in Core?)
-- [ ] "Give an ask" to a new user to move them past friction
-- [ ] (Optional): remember a client's last "profile" and select that on return
-- [ ] Polish the Practitioner "card" in the UI (nice box, services offered, make it actually look like a nice business card (but not too much bc it's the web))
-- [ ] Note V2.0 features while you remember them like 1) filter by practitioner services, 2) integrate number of miles practitioner willing to travel into search return logic, 3) feedback on list return fairness
 - [ ] **Deliverable:** A UI that will inspire adoption by Practitioners and Clients
+- [ ] **Deliverable:** Build a flexible, profile-driven search UI that supports three page categories (Individuals/Families, B2B, Need Help) with configurable client profiles using EF Core entities.
 
+#### Architecture Changes
+- [x] Create `ClientProfile.cs` in Core so you can swap in/out for Demo/Dev
+- [x] Create 6 client profiles in `SeedData.cs` (self, dentist, etc)
+- [x] Create `ProfilePage.cs` that will hold ClientProfiles in the UI
+- [x] Create 2 profile pages (myself/B2B) in `SeedData.cs`
+- [ ] Page Profile 1: Basic individual search (geolocation default)
+- [ ] Page Profile 2: Care home resident visit variant (address default)
+- [x] Add new class DbSets to ApplicationDbContext
+- [x] Create and run migration for new tables
+- [x] **Commit:** backend builds clean
 
-# Milestone 4: Client Profile UI Implementation
+#### App Header
+- [x] Brand all with "ORToothFairy.com" in the app header
+- [x] `About` link in the app header, includes FAQ and #How it Works
+- [x] Hamburger Menu in the app header with other links
+  - [x] #How it Works, Contact, For Hygienists, Financial Assistance, ODHA, Cris's Podcast
+  - [ ] add a Legal page? Terms of Service + Privacy Policy
+- [x] **Commit:** clean app header and supporting pages with links
 
-**Goal:** Build a flexible, profile-driven search UI that supports three page categories (Individuals/Families, B2B, Need Help) with configurable client profiles using EF Core entities.
+#### Home
+- [x] **"Give an ask"** to a new user to move them past friction
+  - h2 "Find The Right Dental Hygienist For Your Needs" is probably too long but it's a start
+- [x] **PageProfiles cards** opaque stock photo
+  - [ ] Order by class property (currently hardcoded, need API endpoint)
+  - [x] @onclick change to transparent
+  - [x] and show collapsed ClientProfile accordions in the PageProfile
+  - [ ] AND SOMEHOW SHOW THE SEARCH :(:(
+- [ ] Wire up API endpoints to fetch ProfilePages and ClientProfiles
 
-## Architecture Changes
-
-### New Entities
-- [ ] Create `ClientProfile.cs` entity with properties:
-  - [ ] Id (primary key)
-  - [ ] HeadlineName (string) - brief profile name
-  - [ ] ExpandedDescription (string) - education text shown on accordion expand
-  - [ ] PageCategory (string) - "IndividualsAndFamilies", "B2B", or "NeedHelp"
-  - [ ] DisplayOrder (int) - sort order within page
-  - [ ] IsActive (bool) - show/hide for demos
-  - [ ] DefaultSearchType (string) - "Geolocation", "Address", or "Zip"
-  - [ ] HighlightColor (string) - hex color for gentle box around suggested search
-  - [ ] ShowRadiusOption (bool)
-  - [ ] DefaultRadiusMiles (int?)
-  - [ ] UserStoryIds (string) - comma-delimited for documentation mapping
-
-- [ ] Add `ClientProfile` DbSet to ApplicationDbContext
-- [ ] Create and run migration for ClientProfile table
-
-### Seed Data
-- [ ] Create seed data for Individuals/Families page profiles
-  - [ ] Profile 1: Basic individual search (geolocation default)
-  - [ ] Profile 2: Care home resident visit variant (address default)
-- [ ] Create seed data for B2B page profiles
-  - [ ] Care facilities coordinator profile
-  - [ ] Dentist office staffing profile
-- [ ] Create seed data for Need Help page profiles
-  - [ ] Community health center navigation profile
-- [ ] Apply seed data in migration or DbContext OnModelCreating
-
-## UI Components
-
-### Page Structure
-- [ ] Create three pages/routes:
-  - [ ] `/search` or `/` - Individuals and Families
-  - [ ] `/business` - B2B
-  - [ ] `/help` - Need Help
-- [ ] Each page filters ClientProfiles by PageCategory
-- [ ] Each page orders profiles by DisplayOrder where IsActive = true
-
-### Accordion Component
-- [ ] Create ClientProfileAccordion component
-  - [ ] Displays HeadlineName as collapsed header
-  - [ ] Expands to show ExpandedDescription on click
-  - [ ] Sets active profile state when clicked
-  - [ ] Visual indicator for currently selected profile
+### Accordions
+- [x] Create ClientProfileAccordion component
+  - [x] Displays Headline as collapsed header
+  - [x] Expands to show ExpandedDescription on click
+  - [x] Sets active profile state when clicked
+  - [x] Visual indicator for currently selected profile
 
 ### Search Component
-- [ ] Reusable Search component (shared across all three pages)
-- [ ] Three search input options always visible:
-  - [ ] "Use my location" button (geolocation)
-  - [ ] Zip code input field
-  - [ ] Address input field
-- [ ] Apply gentle highlight box (using profile's HighlightColor) around DefaultSearchType option
+- [ ] Integrate Search Component from Milestone 3
+- [ ] Apply gentle highlight box (class property) around DefaultSearchType option
 - [ ] Show radius selector if ShowRadiusOption = true, default to DefaultRadiusMiles
 - [ ] On profile selection, update search defaults automatically
+
+Start with this:
+"I need help deciding where to place the search component in my ORToothFairy UI. Currently, users click a ProfilePage card (e.g., 'Individuals & Families'), it becomes transparent, and ClientProfile accordions appear inside the card. When they expand an accordion, they see a description of their use case.
+The search component has 3 input methods (geolocation, zip, address) plus a radius selector. Each ClientProfile has properties like DefaultSearchType and HighlightColor to guide users toward the recommended search method.
+Where should the search appear? Options I'm considering:
+
+Inside the selected card below the accordions
+As a separate section below all cards
+Something else?
+
+I want minimal friction - users should quickly understand this is a search app, not get lost in profile selection. Attach screenshots if it helps."
+(If you can grab screenshots of your current UI, that'll make the conversation way faster)"
 
 ### Results Display
 - [ ] Practitioner card component for results
 - [ ] Order results by distance (closest first)
 - [ ] Display 2-3 service tags/icons per practitioner (no filter yet)
 - [ ] Cards show: name, distance, services, contact info
-
-### Navigation
-- [ ] Hamburger menu with links:
-  - [ ] About page (includes FAQ)
-  - [ ] Oregon Dental Hygienists Association (external)
-  - [ ] OR Oral Health podcast (external)
-  - [ ] Contact page
-  - [ ] Legal page
+#### Practitioner Card Polish
+- [ ] nice box
+- [ ] add services offered, 
+- [x] Integrate link to open address in Maps
+- [ ] Other stuff you haven't written yet
+- [ ] **Commit:** make it like a nice business card (but a web one)
 
 ## Testing & Polish
 - [ ] Test profile swapping on each page
@@ -214,19 +199,15 @@
 - [ ] Responsive design check (mobile, tablet, desktop)
 - [ ] Color contrast check for HighlightColor boxes
 - [ ] Demo mode: toggle IsActive flags to show different profile combinations
+- [ ] wtf that sticky `An unhandled error has occurred. Reload 🗙`
 
 ## Nice-to-Haves (Post-MVP)
 - Service filter UI
 - UserStories entity table (if comma-delimited becomes unwieldy)
 - SearchPreferencesJson for complex future preferences
 - Profile analytics tracking
-
----
-
-**Estimated Time:** 2-3 days
-- Day 1: Entity setup, migrations, seed data, basic accordion (4-6 hrs)
-- Day 2: Search component wiring, profile state management, results display (4-6 hrs)
-- Day 3: Navigation, polish, testing profile combinations (3-4 hrs)
+- Note V2.0 features while you remember them like 1) filter by practitioner services, 2) integrate number of miles practitioner willing to travel into search return logic, 3) feedback on list return fairness
+- remember a client's last "profile" and select that on return
 
 ### Milestone 5: Admin Tools (Week 6, ~10 hours)
 - [?] Create CSV upload script (command-line is fine) - **rethink this**
