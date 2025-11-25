@@ -1,0 +1,126 @@
+@page "/contact"
+@inject NavigationManager NavigationManager
+
+<div class="contact-container">
+    <h1>Contact Us</h1>
+
+    @if (contactType == "hygienist")
+    {
+        <p>Interested in being listed on ORToothFairy? Fill out the form below and we'll be in touch!</p>
+    }
+    else
+    {
+        <p>Have questions or feedback? We'd love to hear from you.</p>
+    }
+
+    <div class="contact-form">
+        <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" @bind="name" placeholder="Jane Smith" />
+        </div>
+
+        <div class="form-group">
+            <label>Your Email</label>
+            <input type="email" @bind="email" placeholder="jane@example.com" />
+        </div>
+
+        <div class="form-group">
+            <label>Subject</label>
+            <input type="text" @bind="subject" />
+        </div>
+
+        <div class="form-group">
+            <label>Message</label>
+            <textarea @bind="message" rows="5"></textarea>
+        </div>
+
+        <button class="btn-primary" @onclick="SendEmail">Send Message</button>
+    </div>
+</div>
+
+@code {
+    private string contactType = "general";
+    private string name = "";
+    private string email = "";
+    private string subject = "";
+    private string message = "";
+    
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (uri.Query.Contains("type=hygienist"))
+        {
+            contactType = "hygienist";
+            subject = "I'd like to be listed on ORToothFairy";
+            message = "Hi! I'm a dental hygienist interested in being listed on ORToothFairy.\n\nMy practice info:\n- Name:\n- License #:\n- Service area:\n- Phone:\n\nThanks!";
+        }
+        else
+        {
+            subject = "Question about ORToothFairy";
+            message = "";
+        }
+    }
+    
+    private async Task SendEmail()
+    {
+        var mailto = $"mailto:hello@ortoothfairy.com" +
+            $"?subject={Uri.EscapeDataString(subject)}" +
+            $"&body={Uri.EscapeDataString($"From: {name} ({email})\n\n{message}")}";
+        
+        await Launcher.OpenAsync(mailto);
+    }
+}
+
+<style>
+    .contact-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+        .contact-container h1 {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-container > p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+    .btn-primary {
+        background: #2196F3;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+</style>

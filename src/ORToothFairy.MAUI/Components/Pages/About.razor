@@ -1,0 +1,201 @@
+﻿@page "/about"
+
+<div class="about-container">
+    <h1>About ORToothFairy</h1>
+
+    <p>
+        ORToothFairy connects Oregonians with dental hygienists who provide care
+        in non-traditional settings - from your home to care facilities to
+        community health centers.
+    </p>
+
+    <h2>Why This Exists</h2>
+    <p>
+        In Oregon, dental hygienists can practice independently under an
+        Extended Practice Permit, bringing preventive dental care directly
+        to people who need it most. But finding these providers isn't easy -
+        until now.
+    </p>
+
+    <h2>Who We Serve</h2>
+    <p>
+        Whether you're a family looking for convenient care, a care facility
+        seeking on-site services, or a dental practice needing coverage,
+        we help you find the right match.
+    </p>
+
+    <div id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+                <strong>Tell us who you are</strong>
+                <p>Select your situation on the home page - whether you're looking for care for yourself, a family member, or you're a business seeking services.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+                <strong>Search your area</strong>
+                <p>Enter your zip code, address, or use your location to find dental hygienists near you.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+                <strong>Contact a hygienist directly</strong>
+                <p>Browse the results, find a hygienist that fits your needs, and reach out to schedule an appointment. It's that simple.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Contact</h2>
+    <p>
+        Questions? Reach out at <a href="mailto:hello@ortoothfairy.com">hello@ortoothfairy.com</a>
+    </p>
+</div>
+
+<div class="faq-container">
+    <h2>Frequently Asked Questions</h2>
+
+    @foreach (var faq in faqs)
+    {
+        <div class="faq-item" @onclick="() => ToggleFaq(faq.Id)">
+            <div class="faq-question">
+                @faq.Question
+                <span class="faq-icon">@(expandedFaqId == faq.Id ? "−" : "+")</span>
+            </div>
+            @if (expandedFaqId == faq.Id)
+            {
+                <p>@faq.Answer</p>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    /* about */
+    .about-container {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .about-container h1 {
+        margin-bottom: 1.5rem;
+    }
+
+    .about-container h2 {
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .about-container p {
+        line-height: 1.6;
+        color: #444;
+    }
+
+    /* how it works */
+    .how-it-works {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+        .how-it-works h2 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+    .step {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+    .step-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: #2196F3;
+        color: white;
+        border-radius: 50%;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .step-content strong {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .step-content p {
+        margin: 0;
+        color: #666;
+    }
+
+    /* faq */
+    .faq-container {
+        max-width: 700px;
+        margin: 3rem auto 0;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
+    }
+
+    .faq-item {
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+    }
+
+    .faq-question {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        background: #f5f5f5;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+
+    .faq-icon {
+        font-size: 1rem;
+    }
+
+    .faq-item p {
+        margin: 0;
+        padding: 0.75rem;
+        background: #fafafa;
+        border-radius: 0 0 4px 4px;
+        line-height: 1.6;
+        color: #444;
+    }
+</style>
+
+@code {
+    private int? expandedFaqId = null;
+
+    private List<(int Id, string Question, string Answer)> faqs = new()
+    {
+        (1, "What is an Extended Practice Permit?",
+            "An Extended Practice Permit allows Oregon dental hygienists to provide preventive care without a dentist's supervision. This means they can work in homes, schools, care facilities, and other community settings."),
+        (2, "Is this covered by insurance?",
+            "Many services are covered by Medicare, Medicaid (Oregon Health Plan), and private insurance. Coverage varies by provider and plan - contact the hygienist directly to confirm they accept your insurance."),
+        (3, "How do I know if a hygienist serves my area?",
+            "Use our search tool to find hygienists near you. Each listing shows their service area and contact information so you can reach out directly.")
+    };
+
+    private void ToggleFaq(int id)
+    {
+        expandedFaqId = expandedFaqId == id ? null : id;
+    }
+}

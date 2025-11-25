@@ -1,17 +1,41 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<div class="app-layout">
+    <header class="app-header">
+        <a href="/" class="app-title">ORToothFairy.com</a>
+        <nav class="app-nav">
+            <a href="/about">About</a>
+            <HamburgerMenu />
+        </nav>
+    </header>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">ASP.NET Core Default link</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
+    <main class="app-main">
+        <ErrorBoundary>
+            <ChildContent>
+                @Body
+            </ChildContent>
+            <ErrorContent Context="ex">
+                <div style="color: red; padding: 1rem; background: #ffe0e0;">
+                    <h3>Error:</h3>
+                    <pre>@ex.Message</pre>
+                    <pre>@ex.StackTrace</pre>
+                </div>
+            </ErrorContent>
+        </ErrorBoundary>
     </main>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        System.Diagnostics.Debug.WriteLine("MainLayout initialized");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            System.Diagnostics.Debug.WriteLine("MainLayout first render complete");
+        }
+    }
+}
