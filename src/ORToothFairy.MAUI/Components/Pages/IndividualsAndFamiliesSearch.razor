@@ -115,9 +115,14 @@
                             <!-- Name & Distance Header -->
                             <div class="if-card-header">
                                 <h3>@practitioner.FirstName @practitioner.LastName</h3>
-                                <span class="if-card-distance">
-                                    @practitioner.UserPractitionerProximityMiles.ToString("F1") mi
-                                </span>
+                                <div class="if-card-header-right">
+                                    <button class="if-favorite-btn" @onclick="() => ToggleFavorite(practitioner.PractitionerId)" @onclick:stopPropagation="true">
+                                        @(IsFavorite(practitioner.PractitionerId) ? "❤️" : "🤍")
+                                    </button>
+                                    <span class="if-card-distance">
+                                        @practitioner.UserPractitionerProximityMiles.ToString("F1") mi
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Location -->
@@ -390,4 +395,48 @@
             StateHasChanged();
         }
     }
+
+    // Add these to your @code section in IndividualsAndFamiliesSearch.razor:
+
+    private HashSet<int> favoritePractitionerIds = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFavorites();
+    }
+
+    private async Task LoadFavorites()
+    {
+        // Load from MAUI Preferences (persists across app sessions)
+        var stored = Preferences.Get("favorite_practitioners", "");
+        if (!string.IsNullOrEmpty(stored))
+        {
+            favoritePractitionerIds = stored
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToHashSet();
+        }
+    }
+
+    private async Task ToggleFavorite(int practitionerId)
+    {
+        if (favoritePractitionerIds.Contains(practitionerId))
+        {
+            favoritePractitionerIds.Remove(practitionerId);
+        }
+        else
+        {
+            favoritePractitionerIds.Add(practitionerId);
+        }
+
+        // Save to local storage
+        Preferences.Set("favorite_practitioners", string.Join(",", favoritePractitionerIds));
+
+        // TODO (post-MVP): Ping API for aggregate stats
+        // await Http.PostAsync($"api/practitioners/{practitionerId}/heart", null);
+
+        StateHasChanged();
+    }
+
+    private bool IsFavorite(int practitionerId) => favoritePractitionerIds.Contains(practitionerId);
 }

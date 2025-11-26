@@ -1,0 +1,537 @@
+@page "/business-and-facilities"
+
+@using ORToothFairy.Core.Models
+
+<div class="bf-search-page">
+    <!-- Hero Section with Background Image -->
+    <div class="bf-hero" style="background-image: url('images/national-cancer-institute-1c8sj2IO2I4-unsplash.jpg');">
+        <div class="bf-hero-overlay"></div>
+        
+        <div class="bf-hero-content">
+            <h1>Find Dental Hygienists for Your Organization</h1>
+            
+            <!-- Business Triage Card -->
+            <div class="bf-triage-card">
+                <p class="bf-triage-intro">
+                    Whether you need ongoing staff, temporary coverage, or emergency fill-ins, 
+                    connect directly with Oregon dental hygienists ready to work.
+                </p>
+                
+                <!-- Staffing Type Selector -->
+                <div class="bf-staffing-types">
+                    <p class="bf-staffing-label">What are you looking for?</p>
+                    
+                    <label class="bf-radio-card @(staffingType == "full-time" ? "selected" : "")">
+                        <input type="radio" name="staffingType" value="full-time" @onchange="@(() => staffingType = "full-time")" />
+                        <span class="bf-radio-icon">👩‍⚕️</span>
+                        <span class="bf-radio-text">
+                            <strong>Full-time</strong>
+                            <small>Permanent addition to your team</small>
+                        </span>
+                    </label>
+                    
+                    <label class="bf-radio-card @(staffingType == "part-time" ? "selected" : "")">
+                        <input type="radio" name="staffingType" value="part-time" @onchange="@(() => staffingType = "part-time")" />
+                        <span class="bf-radio-icon">📅</span>
+                        <span class="bf-radio-text">
+                            <strong>Part-time</strong>
+                            <small>Regular scheduled days</small>
+                        </span>
+                    </label>
+                    
+                    <label class="bf-radio-card @(staffingType == "coverage" ? "selected" : "")">
+                        <input type="radio" name="staffingType" value="coverage" @onchange="@(() => staffingType = "coverage")" />
+                        <span class="bf-radio-icon">🗓️</span>
+                        <span class="bf-radio-text">
+                            <strong>Coverage</strong>
+                            <small>Vacation, leave, or planned absence</small>
+                        </span>
+                    </label>
+                    
+                    <label class="bf-radio-card @(staffingType == "emergency" ? "selected" : "")">
+                        <input type="radio" name="staffingType" value="emergency" @onchange="@(() => staffingType = "emergency")" />
+                        <span class="bf-radio-icon">🚨</span>
+                        <span class="bf-radio-text">
+                            <strong>Emergency</strong>
+                            <small>Same-day or next-day fill-in</small>
+                        </span>
+                    </label>
+                </div>
+                
+                <p class="bf-triage-note">
+                    <em>Search is free. Business dashboard features coming soon.</em>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="bf-search-section">
+        <!-- Error Message -->
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="bf-error">
+                <p>⚠️ @errorMessage</p>
+            </div>
+        }
+
+        <div class="bf-search-controls">
+            <h2>Search by Location</h2>
+
+            <!-- Location Button -->
+            <button class="bf-btn-primary" @onclick="UseMyLocation">
+                📍 Use My Location
+            </button>
+
+            <div class="bf-search-divider">
+                <span>or</span>
+            </div>
+
+            <!-- Zip Code -->
+            <div class="bf-input-row">
+                <input type="text"
+                       @bind="zipCode"
+                       placeholder="Enter zip code (e.g., 97124)"
+                       maxlength="5" />
+                <button class="bf-btn-secondary" @onclick="SearchByZip">Search</button>
+            </div>
+
+            <!-- Address -->
+            <div class="bf-input-row">
+                <input type="text"
+                       @bind="address"
+                       placeholder="Or enter your facility address" />
+                <button class="bf-btn-secondary" @onclick="SearchByAddress">Search</button>
+            </div>
+
+            <!-- Filters Row -->
+            <div class="bf-filters">
+                <div class="bf-filter-item">
+                    <label>Distance:</label>
+                    <select @bind="maxDistance" @bind:after="OnDistanceChanged">
+                        <option value="5">5 miles</option>
+                        <option value="10">10 miles</option>
+                        <option value="25" selected>25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="999999">All</option>
+                    </select>
+                </div>
+
+                <!-- Services Filter Placeholder -->
+                <div class="bf-filter-item bf-filter-coming-soon">
+                    <label>Services:</label>
+                    <select disabled>
+                        <option>All services</option>
+                    </select>
+                    <span class="bf-coming-soon-badge">Coming soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        @if (isLoading)
+        {
+            <div class="bf-loading">
+                <div class="bf-spinner"></div>
+                <p>Searching for practitioners...</p>
+            </div>
+        }
+
+        <!-- Results -->
+        @if (!isLoading && results != null && results.Any())
+        {
+            <div class="bf-results">
+                <div class="bf-results-header">
+                    <h2 class="bf-results-count">@results.Count hygienist@(results.Count != 1 ? "s" : "") found</h2>
+                    @if (!string.IsNullOrEmpty(staffingType))
+                    {
+                        <span class="bf-results-filter-tag">
+                            @GetStaffingTypeLabel(staffingType)
+                        </span>
+                    }
+                </div>
+
+                <div class="bf-results-grid">
+                    @foreach (var practitioner in results)
+                    {
+                        <div class="bf-practitioner-card">
+                            <!-- Name, Bench, & Distance Header -->
+                            <div class="bf-card-header">
+                                <h3>@practitioner.FirstName @practitioner.LastName</h3>
+                                <div class="bf-card-header-right">
+                                    <button class="bf-bench-btn" 
+                                            @onclick="() => ToggleBench(practitioner.PractitionerId)" 
+                                            @onclick:stopPropagation="true"
+                                            title="@(IsOnBench(practitioner.PractitionerId) ? "Remove from bench" : "Add to bench")">
+                                        @(IsOnBench(practitioner.PractitionerId) ? "⭐" : "☆")
+                                    </button>
+                                    <span class="bf-card-distance">
+                                        @practitioner.UserPractitionerProximityMiles.ToString("F1") mi
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Location -->
+                            <p class="bf-card-location">
+                                @practitioner.City, @practitioner.ZipCode
+                            </p>
+
+                            <!-- Services -->
+                            @if (practitioner.Services != null && practitioner.Services.Any())
+                            {
+                                <div class="bf-card-services">
+                                    @foreach (var service in practitioner.Services.Take(4))
+                                    {
+                                        <span class="bf-service-chip">@service</span>
+                                    }
+                                    @if (practitioner.Services.Count > 4)
+                                    {
+                                        <span class="bf-service-chip bf-service-more">+@(practitioner.Services.Count - 4) more</span>
+                                    }
+                                </div>
+                            }
+
+                            <!-- Contact Actions -->
+                            <div class="bf-card-actions">
+                                @if (practitioner.AcceptsCalls && !string.IsNullOrEmpty(practitioner.Phone))
+                                {
+                                    <a href="tel:@practitioner.Phone" class="bf-action-btn bf-action-call">
+                                        📞 Call
+                                    </a>
+                                }
+                                @if (practitioner.AcceptsTexts && !string.IsNullOrEmpty(practitioner.Phone))
+                                {
+                                    <a href="sms:@practitioner.Phone" class="bf-action-btn bf-action-text">
+                                        💬 Text
+                                    </a>
+                                }
+                                @if (!string.IsNullOrEmpty(practitioner.Email))
+                                {
+                                    <a href="mailto:@practitioner.Email" class="bf-action-btn bf-action-email">
+                                        ✉️ Email
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <!-- Empty State -->
+        @if (!isLoading && hasSearched && (results == null || !results.Any()))
+        {
+            <div class="bf-empty-state">
+                @if (maxDistance < 999999)
+                {
+                    <p>No hygienists found within @maxDistance miles.</p>
+                    <p>Try increasing the distance filter above.</p>
+                }
+                else
+                {
+                    <p>No hygienists found in this area.</p>
+                    <p>
+                        Contact us at <a href="mailto:hello@ortoothfairy.com">hello@ortoothfairy.com</a> 
+                        and we'll help you find coverage.
+                    </p>
+                }
+            </div>
+        }
+
+        <!-- Business Interest CTA -->
+        @if (hasSearched)
+        {
+            <div class="bf-interest-cta">
+                <h3>Want more?</h3>
+                <p>
+                    We're building tools for scheduling, credentialing, and managing your hygienist bench. 
+                    Interested in early access?
+                </p>
+                
+                @if (!interestSubmitted)
+                {
+                    <div class="bf-interest-form">
+                        <input type="text" 
+                               @bind="businessName" 
+                               placeholder="Your practice or facility name" />
+                        <input type="email" 
+                               @bind="businessEmail" 
+                               placeholder="Email address" />
+                        <select @bind="businessType">
+                            <option value="">What type of organization?</option>
+                            <option value="dental-practice">Dental Practice</option>
+                            <option value="care-facility">Care Facility / Nursing Home</option>
+                            <option value="school">School or University</option>
+                            <option value="corporate">Corporate Wellness</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <button class="bf-btn-primary" @onclick="SubmitInterest">
+                            Keep Me Posted
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="bf-interest-thanks">
+                        <p>✅ Thanks! We'll be in touch soon.</p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Inject] private SearchService SearchService { get; set; } = default!;
+
+    // Search state
+    private string zipCode = "";
+    private string address = "";
+    private int maxDistance = 25;
+    private bool isLoading = false;
+    private bool hasSearched = false;
+    private string? errorMessage;
+    private string staffingType = "";
+
+    // Results
+    private List<PractitionerSearchResult>? results;
+    private List<PractitionerSearchResult>? allResults;
+
+    // For re-running searches on filter change
+    private string lastZipCode = "";
+    private string lastAddress = "";
+    private double? lastLat;
+    private double? lastLon;
+
+    // Bench (saved hygienists for this business)
+    private HashSet<int> benchPractitionerIds = new();
+
+    // Interest form
+    private string businessName = "";
+    private string businessEmail = "";
+    private string businessType = "";
+    private bool interestSubmitted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBench();
+    }
+
+    private async Task LoadBench()
+    {
+        var stored = Preferences.Get("bench_practitioners", "");
+        if (!string.IsNullOrEmpty(stored))
+        {
+            benchPractitionerIds = stored
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToHashSet();
+        }
+        await Task.CompletedTask;
+    }
+
+    private void ToggleBench(int practitionerId)
+    {
+        if (benchPractitionerIds.Contains(practitionerId))
+        {
+            benchPractitionerIds.Remove(practitionerId);
+        }
+        else
+        {
+            benchPractitionerIds.Add(practitionerId);
+        }
+        
+        Preferences.Set("bench_practitioners", string.Join(",", benchPractitionerIds));
+        StateHasChanged();
+    }
+
+    private bool IsOnBench(int practitionerId) => benchPractitionerIds.Contains(practitionerId);
+
+    private string GetStaffingTypeLabel(string type) => type switch
+    {
+        "full-time" => "Full-time",
+        "part-time" => "Part-time",
+        "coverage" => "Coverage",
+        "emergency" => "Emergency",
+        _ => ""
+    };
+
+    private async Task UseMyLocation()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            StateHasChanged();
+
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            if (status != PermissionStatus.Granted)
+            {
+                errorMessage = "Location permission denied. Please enable location access or use zip/address.";
+                return;
+            }
+
+            var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+            var location = await Geolocation.GetLocationAsync(request);
+
+            if (location == null)
+            {
+                errorMessage = "Unable to get your location. Please try zip code or address.";
+                return;
+            }
+
+            lastLat = location.Latitude;
+            lastLon = location.Longitude;
+            lastZipCode = "";
+            lastAddress = "";
+
+            allResults = await SearchService.SearchByCoordinatesAsync(
+                location.Latitude,
+                location.Longitude,
+                maxDistance);
+
+            results = allResults;
+            hasSearched = true;
+        }
+        catch (FeatureNotSupportedException)
+        {
+            errorMessage = "Geolocation is not supported on this device.";
+        }
+        catch (PermissionException)
+        {
+            errorMessage = "Location permission was denied.";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error getting location: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SearchByZip()
+    {
+        if (string.IsNullOrWhiteSpace(zipCode) || zipCode.Length != 5)
+        {
+            errorMessage = "Please enter a valid 5-digit zip code.";
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            hasSearched = true;
+            lastZipCode = zipCode;
+            lastAddress = "";
+            lastLat = null;
+            lastLon = null;
+            StateHasChanged();
+
+            allResults = await SearchService.SearchByZipCodeAsync(zipCode, maxDistance);
+            results = allResults;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Search failed: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SearchByAddress()
+    {
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            errorMessage = "Please enter an address.";
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            hasSearched = true;
+            lastAddress = address;
+            lastZipCode = "";
+            lastLat = null;
+            lastLon = null;
+            StateHasChanged();
+
+            allResults = await SearchService.SearchByAddressAsync(address, maxDistance);
+            results = allResults;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Search failed: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnDistanceChanged()
+    {
+        if (!hasSearched) return;
+
+        if (!string.IsNullOrEmpty(lastZipCode))
+        {
+            zipCode = lastZipCode;
+            await SearchByZip();
+        }
+        else if (!string.IsNullOrEmpty(lastAddress))
+        {
+            address = lastAddress;
+            await SearchByAddress();
+        }
+        else if (lastLat.HasValue && lastLon.HasValue)
+        {
+            try
+            {
+                isLoading = true;
+                StateHasChanged();
+
+                allResults = await SearchService.SearchByCoordinatesAsync(
+                    lastLat.Value,
+                    lastLon.Value,
+                    maxDistance);
+                results = allResults;
+            }
+            finally
+            {
+                isLoading = false;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task SubmitInterest()
+    {
+        // TODO: Post to API endpoint to capture interest
+        // For MVP, just mark as submitted
+        if (string.IsNullOrWhiteSpace(businessEmail))
+        {
+            errorMessage = "Please enter your email address.";
+            return;
+        }
+
+        // TODO: await Http.PostAsJsonAsync("api/business-interest", new { businessName, businessEmail, businessType });
+        
+        Console.WriteLine($"[Business Interest] {businessName} | {businessEmail} | {businessType}");
+        interestSubmitted = true;
+        StateHasChanged();
+    }
+}
