@@ -1,25 +1,42 @@
-﻿<div class="hamburger-wrapper">
-    
-    <button class="hamburger-btn" @onclick="Toggle">☰</button>
+﻿@inject NavigationManager NavigationManager
+@implements IDisposable
 
+<div class="hamburger-wrapper">
+    <button class="hamburger-btn" @onclick="Toggle">☰</button>
     @if (isOpen)
     {
         <div class="hamburger-dropdown">
-            <a href="/about#how-it-works">How It Works</a><br/>
-            <a href="/contact">Contact Us</a><br/>
-            <a href="/contact?type=hygienist">Hygienist Sign Up</a><br/>
-            <a href="https://www.odha.org/" target="_blank">ODHA Website</a><br/>
-            <a href="https://www.oregon.gov/oha/ph/preventionwellness/oralhealth/pages/index.aspx" target="_blank">Financial Assistance</a><br />
-            <span>Cris's Podcast (Coming Soon!)</span>
+            <a href="/about#how-it-works">How It Works</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/contact?type=hygienist">Hygienist Sign Up</a>
+            <a href="https://www.odha.org/" target="_blank">ODHA Website</a>
+            <a href="https://www.oregon.gov/oha/ph/preventionwellness/oralhealth/pages/index.aspx" target="_blank">Financial Assistance</a>
+            <span class="menu-placeholder">Cris's Podcast (Coming Soon!)</span>
         </div>
     }
 </div>
 
 @code {
     private bool isOpen = false;
-
+    
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+    
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        isOpen = false;
+        StateHasChanged();
+    }
+    
     private void Toggle()
     {
         isOpen = !isOpen;
+    }
+    
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }

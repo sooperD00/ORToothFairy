@@ -136,6 +136,7 @@
 - [x] Add new class DbSets to ApplicationDbContext
 - [x] Create and run migration for new tables
 - [x] **Commit:** backend builds clean
+- [ ] Simplify 11/25/25: move the search customization to the ProfilePage.cs->BusinessProfile.cs rename like you want to do. That way you have only 2 search profiles and you can optimize the UI for only 2 customer types
 
 #### App Header
 - [x] Brand all with "ORToothFairy.com" in the app header
@@ -153,7 +154,9 @@
   - [x] @onclick change to transparent
   - [x] and show collapsed ClientProfile accordions in the PageProfile
   - [ ] AND SOMEHOW SHOW THE SEARCH :(:(
+  - [ ] Simplify: when user clicks a profile card, remove the other and focus just on this group. You can remember them later for less friction. You can make the other card small instead if you want or add a simple link in the bottom, or add another menu for business group at the top or bottom like you did with the hamburger menu
 - [ ] Wire up API endpoints to fetch ProfilePages and ClientProfiles
+
 
 ### Accordions
 - [x] Create ClientProfileAccordion component
@@ -161,12 +164,13 @@
   - [x] Expands to show ExpandedDescription on click
   - [x] Sets active profile state when clicked
   - [x] Visual indicator for currently selected profile
+  - [ ] You should probably just have some text all together and no accordion? ok for now, just find a spot for the search UI to go when user selects their business profile
 
 ### Search Component
 - [ ] Integrate Search Component from Milestone 3
 - [ ] Apply gentle highlight box (class property) around DefaultSearchType option
 - [ ] Show radius selector if ShowRadiusOption = true, default to DefaultRadiusMiles
-- [ ] On profile selection, update search defaults automatically
+- [ ] On profile->no, bgroup selection, update search defaults - consider highlighting the features that B2B other side businesses will pay for (get them from chat, list them here)
 
 Start with this:
 "I need help deciding where to place the search component in my ORToothFairy UI. Currently, users click a ProfilePage card (e.g., 'Individuals & Families'), it becomes transparent, and ClientProfile accordions appear inside the card. When they expand an accordion, they see a description of their use case.
@@ -179,6 +183,10 @@ Something else?
 
 I want minimal friction - users should quickly understand this is a search app, not get lost in profile selection. Attach screenshots if it helps."
 (If you can grab screenshots of your current UI, that'll make the conversation way faster)"
+
+and remember 
+dotnet build -f net9.0-windows10.0.19041.0
+dotnet run -f net9.0-windows10.0.19041.0
 
 ### Results Display
 - [ ] Practitioner card component for results

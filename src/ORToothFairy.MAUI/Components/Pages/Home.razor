@@ -1,219 +1,34 @@
-﻿@page "/"
-@using ORToothFairy.Core.Entities
+@page "/"
+@inject NavigationManager Navigation
 
-<div class="landing-container" @onclick="DeselectPage">
-    <h2 class="landing-subtitle">Find The Right Dental Hygienist For Your Needs</h2>
-    
-    <div class="profile-pages" @onclick:stopPropagation="true">
-        @foreach (var pp in profilePages)
-        {
-            <div class="profile-page-card @(selectedPage?.Id == pp.Id ? "selected" : "")" @onclick="() => SelectPage(pp)">
-                <img src="@pp.StockPhotoUrl" alt="@pp.DisplayName" />
-                <h2>@pp.DisplayName</h2>
-            
-                @if (selectedPage?.Id == pp.Id)
-                {
-                    <div class="client-profiles">
-                        @foreach (var cp in clientProfiles.Where(c => c.ProfilePageId == pp.Id).OrderBy(c => c.DisplayOrder))
-                        {
-                            <div class="accordion-item" @onclick:stopPropagation="true">
-                                <div class="accordion-header" @onclick="() => ToggleAccordion(cp.Id)">
-                                    <span>@cp.Headline</span>
-                                    <span class="accordion-icon">@(expandedProfileId == cp.Id ? "−" : "+")</span>
-                                </div>
-                                @if (expandedProfileId == cp.Id)
-                                {
-                                    <div class="accordion-content">
-                                        <p>@cp.ExpandedDescription</p>
-                                    </div>
-                                }
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        }
-    </div>
+<div class="landing-container">
+    <h2 class="landing-subtitle">Find a Dental Hygienist</h2>
 
-    @if (selectedPage != null)
-    {
-        <div class="search-section">
-            <!-- Search will go here -->
+    <div class="profile-pages">
+        <!-- Individuals & Families -->
+        <div class="profile-page-card" @onclick="GoToIndividualsAndFamilies">
+            <img src="images/nathan-anderson-GM5Yn5XRVqA-unsplash.jpg" alt="Individuals & Families" />
+            <h2>Individuals & Families</h2>
         </div>
-    }
+
+        <!-- Business & Facilities -->
+        <div class="profile-page-card" @onclick="GoToBusinessAndFacilities">
+            <img src="images/national-cancer-institute-1c8sj2IO2I4-unsplash.jpg" alt="Business & Facilities" />
+            <h2>Business & Facilities</h2>
+        </div>
+    </div>
 </div>
 
 @code {
-    private List<ProfilePage> profilePages = new();
-    private ProfilePage? selectedPage;
-    private List<ClientProfile> clientProfiles = new();
-    private int? expandedProfileId = null;
-
-    protected override async Task OnInitializedAsync()
+    private void GoToIndividualsAndFamilies()
     {
-        // Hardcoded for now - will fetch from API later
-        profilePages = new List<ProfilePage>
-        {
-            new ProfilePage
-            {
-                Id = 1,
-                Name = "IndividualsAndFamilies",
-                DisplayName = "Individuals & Families",
-                StockPhotoUrl = "images/nathan-anderson-GM5Yn5XRVqA-unsplash.jpg", // Update with your actual path
-                CardColor = "rgba(255, 255, 255, 0)", // Transparent
-                DisplayOrder = 1,
-                IsActive = true
-            },
-
-            // Page: Business & Facilities
-            new ProfilePage
-            {
-                Id = 2,
-                Name = "BusinessAndFacilities",
-                DisplayName = "Business & Facilities",
-                StockPhotoUrl = "images/national-cancer-institute-1c8sj2IO2I4-unsplash.jpg", // Update with your actual path
-                CardColor = "rgba(255, 255, 255, 0)", // Transparent
-                DisplayOrder = 2,
-                IsActive = true
-            }
-        };
-
-        clientProfiles = new List<ClientProfile>
-        {
-            // Myself or Family
-            new ClientProfile
-            {
-                Id = 1,
-                Name = "MyselfOrFamily",
-                Headline = "I need care for myself or my family",
-                ExpandedDescription = "You can connect with a dental hygienist at a doctor's office, another care facility, or contact one that comes to your home for mobile services.",
-                CardColor = "#E3F2FD",
-                HighlightColor = "#BBDEFB",
-                DefaultSearchType = "Geolocation",
-                ShowRadiusOption = true,
-                DefaultRadiusMiles = 25,
-                ProfilePageId = 1,  // IndividualsAndFamilies
-                DisplayOrder = 1,
-                IsActive = true,
-                UserStoryIds = "US-001,US-002"
-            },
-
-            // Care Facility (Patient/Guardian)
-            new ClientProfile
-            {
-                Id = 2,
-                Name = "FamilyMemberInCareFacility",
-                Headline = "I need care for a family member in a nursing home or care facility",
-                ExpandedDescription = "Many dental hygienists provide services at care facilities including assisted living, memory care, nursing homes, and other residential settings. You can search for hygienists who visit your loved one's facility or contact facilities directly to ask about their dental hygiene services.",
-                CardColor = "#F3E5F5",
-                HighlightColor = "#E1BEE7",
-                DefaultSearchType = "Address",
-                ShowRadiusOption = true,
-                DefaultRadiusMiles = 10,
-                ProfilePageId = 1,  // IndividualsAndFamilies
-                DisplayOrder = 2,
-                IsActive = true,
-                UserStoryIds = "US-003,US-004"
-            },
-
-            // Help Needed (Financial/Social)
-            new ClientProfile
-            {
-                Id = 3,
-                Name = "NeedHelpGettingCare",
-                Headline = "I need help getting care",
-                ExpandedDescription = "Dental hygiene services are often covered by Medicare/Medicaid or other assistance programs. You can search for dental hygienists who accept these programs, work in community health centers, or provide services in underserved areas.",
-                CardColor = "#FFF3E0",
-                HighlightColor = "#FFE0B2",
-                DefaultSearchType = "Zip",
-                ShowRadiusOption = true,
-                DefaultRadiusMiles = 50,
-                ProfilePageId = 1,  // IndividualsAndFamilies
-                DisplayOrder = 3,
-                IsActive = true,
-                UserStoryIds = "US-005,US-006,US-007"
-            },
-
-            // Care Facility (B2B)
-            new ClientProfile
-            {
-                Id = 4,
-                Name = "CareFacility",
-                Headline = "I run a care facility",
-                ExpandedDescription = "Connect with dental hygienists who provide on-site services at assisted living facilities, nursing homes, memory care centers, and other residential care settings. Many hygienists specialize in serving facilities and can establish regular visit schedules for your residents.",
-                CardColor = "#E8F5E9",
-                HighlightColor = "#C8E6C9",
-                DefaultSearchType = "Address",
-                ShowRadiusOption = true,
-                DefaultRadiusMiles = 25,
-                ProfilePageId = 2,  // B2B
-                DisplayOrder = 1,
-                IsActive = true,
-                UserStoryIds = "US-008,US-009"
-            },
-
-            // Dentist Office (B2B)
-            new ClientProfile
-            {
-                Id = 5,
-                Name = "DentistOffice",
-                Headline = "I own a dentist office",
-                ExpandedDescription = "Find dental hygienists available for contract work, part-time positions, or temp coverage. You can search by location and filter by availability, certifications, and specializations to find the right fit for your practice.",
-                CardColor = "#E1F5FE",
-                HighlightColor = "#B3E5FC",
-                DefaultSearchType = "Geolocation",
-                ShowRadiusOption = true,
-                DefaultRadiusMiles = 15,
-                ProfilePageId = 2,  // B2B
-                DisplayOrder = 2,
-                IsActive = true,
-                UserStoryIds = "US-010,US-011"
-            },
-
-            // Other (B2B)
-            new ClientProfile
-            {
-                Id = 6,
-                Name = "ContactUs",
-                Headline = "I need something different",
-                ExpandedDescription = "Have a unique situation or specific need? Contact us directly and we'll help you connect with the right dental hygiene services.",
-                CardColor = "#F5F5F5",
-                HighlightColor = "#EEEEEE",
-                DefaultSearchType = "Contact",
-                ShowRadiusOption = false,
-                DefaultRadiusMiles = 0,
-                ProfilePageId = 2,  // B2B
-                DisplayOrder = 3,
-                IsActive = true,
-                UserStoryIds = "US-012"
-            }
-        };
-    
-        await Task.CompletedTask; // Keeps it async for later
-    }
-    
-    private void SelectPage(ProfilePage pp)
-    {
-        selectedPage = pp;
-        StateHasChanged();
+        Navigation.NavigateTo("/individuals-and-families");
     }
 
-    private void ToggleAccordion(int profileId)
+    private void GoToBusinessAndFacilities()
     {
-        expandedProfileId = expandedProfileId == profileId ? null : profileId;
-    }
-
-    private void DeselectPage()
-    {
-        selectedPage = null;
-        expandedProfileId = null;
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            System.Diagnostics.Debug.WriteLine("Home first render complete");
-        }
+        // TODO: Create BusinessAndFacilitiesSearch.razor later
+        // For now, could show a "coming soon" or navigate to contact
+        Navigation.NavigateTo("/contact"); // Placeholder
     }
 }

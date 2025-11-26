@@ -57,7 +57,8 @@ public class SearchService : ISearchService
                 AcceptsTexts = x.Practitioner.AcceptsTexts,
                 AcceptsCalls = x.Practitioner.AcceptsCalls,
                 UserPractitionerProximityMiles = x.Distance,
-                
+                Services = x.Practitioner.Services,
+
                 // For Map Directions
                 Latitude = x.Practitioner.Latitude,
                 Longitude = x.Practitioner.Longitude,

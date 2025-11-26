@@ -1,5 +1,6 @@
 @page "/contact"
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="contact-container">
     <h1>Contact Us</h1>
@@ -47,6 +48,18 @@
     
     protected override void OnInitialized()
     {
+        NavigationManager.LocationChanged += OnLocationChanged;
+        LoadContactType();
+    }
+    
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        LoadContactType();
+        StateHasChanged();
+    }
+    
+    private void LoadContactType()
+    {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (uri.Query.Contains("type=hygienist"))
         {
@@ -56,9 +69,14 @@
         }
         else
         {
+            contactType = "general";
             subject = "Question about ORToothFairy";
             message = "";
         }
+        
+        // Reset name and email too
+        name = "";
+        email = "";
     }
     
     private async Task SendEmail()
@@ -69,58 +87,10 @@
         
         await Launcher.OpenAsync(mailto);
     }
+    
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
 }
 
-<style>
-    .contact-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
-        .contact-container h1 {
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-container > p {
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-    .form-group {
-        margin-bottom: 1rem;
-    }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-        }
-
-    .btn-primary {
-        background: #2196F3;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-    }
-
-        .btn-primary:hover {
-            background: #1976D2;
-        }
-</style>
