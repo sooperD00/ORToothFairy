@@ -122,100 +122,66 @@
 - [x] Make phone/email tappable
 - [x] **Deliverable:** Working app that finds practitioners
 
-### Milestone 4: UI/UX (Week 5, ~15 hours)
-- [ ] **Deliverable:** A UI that will inspire adoption by Practitioners and Clients
-- [ ] **Deliverable:** Build a flexible, profile-driven search UI that supports three page categories (Individuals/Families, B2B, Need Help) with configurable client profiles using EF Core entities.
+### Milestone 4: UI/UX ✅ COMPLETE
+**Goal:** A UI that inspires adoption by Practitioners and Clients
 
-#### Architecture Changes
-- [x] Create `ClientProfile.cs` in Core so you can swap in/out for Demo/Dev
-- [x] Create 6 client profiles in `SeedData.cs` (self, dentist, etc)
-- [x] Create `ProfilePage.cs` that will hold ClientProfiles in the UI
-- [x] Create 2 profile pages (myself/B2B) in `SeedData.cs`
-- [ ] Page Profile 1: Basic individual search (geolocation default)
-- [ ] Page Profile 2: Care home resident visit variant (address default)
-- [x] Add new class DbSets to ApplicationDbContext
-- [x] Create and run migration for new tables
-- [x] **Commit:** backend builds clean
-- [ ] Simplify 11/25/25: move the search customization to the ProfilePage.cs->BusinessProfile.cs rename like you want to do. That way you have only 2 search profiles and you can optimize the UI for only 2 customer types
+#### Home Page
+- [x] Two stock photo cards: "Individuals & Families" / "Business & Facilities"
+- [x] Click navigates directly to purpose-built search page (no accordions)
+- [x] Clean, minimal friction entry point
 
-#### App Header
-- [x] Brand all with "ORToothFairy.com" in the app header
-- [x] `About` link in the app header, includes FAQ and #How it Works
-- [x] Hamburger Menu in the app header with other links
-  - [x] #How it Works, Contact, For Hygienists, Financial Assistance, ODHA, Cris's Podcast
-  - [ ] add a Legal page? Terms of Service + Privacy Policy
-- [x] **Commit:** clean app header and supporting pages with links
+#### Individuals & Families Search (`/individuals-and-families`)
+- [x] Hero section with family photo + gradient overlay
+- [x] Frosted-glass triage card explaining use cases (house calls, care facilities, dental offices, community centers)
+- [x] Search by location, zip, or address
+- [x] Distance filter
+- [x] Services filter placeholder with "Coming soon" badge
+- [x] Business-card style results with services chips
+- [x] Contact buttons (Call/Text/Email) shown only if accepted
+- [x] Favorites (❤️) with local storage persistence
 
-#### Home
-- [x] **"Give an ask"** to a new user to move them past friction
-  - h2 "Find The Right Dental Hygienist For Your Needs" is probably too long but it's a start
-- [x] **PageProfiles cards** opaque stock photo
-  - [ ] Order by class property (currently hardcoded, need API endpoint)
-  - [x] @onclick change to transparent
-  - [x] and show collapsed ClientProfile accordions in the PageProfile
-  - [ ] AND SOMEHOW SHOW THE SEARCH :(:(
-  - [ ] Simplify: when user clicks a profile card, remove the other and focus just on this group. You can remember them later for less friction. You can make the other card small instead if you want or add a simple link in the bottom, or add another menu for business group at the top or bottom like you did with the hamburger menu
-- [ ] Wire up API endpoints to fetch ProfilePages and ClientProfiles
+#### Business & Facilities Search (`/business-and-facilities`)
+- [x] Hero section with facility photo + gradient overlay
+- [x] Staffing type selector (Full-time / Part-time / Coverage / Emergency)
+- [x] Same search functionality as B2C
+- [x] "Bench" feature (⭐) separate from B2C favorites
+- [x] Business interest capture form (name, email, org type)
+- [x] "Coming soon" messaging for dashboard features
 
+#### Practitioner Cards
+- [x] Name + distance badge
+- [x] City/zip location
+- [x] Services as chips (max 4 + "more" indicator)
+- [x] Call/Text/Email action buttons (conditional on AcceptsCalls/AcceptsTexts)
+- [x] Directions button (opens Maps)
+- [x] Favorite/Bench toggle
 
-### Accordions
-- [x] Create ClientProfileAccordion component
-  - [x] Displays Headline as collapsed header
-  - [x] Expands to show ExpandedDescription on click
-  - [x] Sets active profile state when clicked
-  - [x] Visual indicator for currently selected profile
-  - [ ] You should probably just have some text all together and no accordion? ok for now, just find a spot for the search UI to go when user selects their business profile
+#### About Page
+- [x] Clean copy explaining the app
+- [x] "How It Works" steps
+- [x] FAQ with B2C, B2B, and hygienist questions
+- [x] Contact link
 
-### Search Component
-- [ ] Integrate Search Component from Milestone 3
-- [ ] Apply gentle highlight box (class property) around DefaultSearchType option
-- [ ] Show radius selector if ShowRadiusOption = true, default to DefaultRadiusMiles
-- [ ] On profile->no, bgroup selection, update search defaults - consider highlighting the features that B2B other side businesses will pay for (get them from chat, list them here)
+#### Header & Navigation
+- [x] "ORToothFairy" branding
+- [x] About link
+- [x] Hamburger menu (How it Works, Contact, For Hygienists, etc.)
 
-Start with this:
-"I need help deciding where to place the search component in my ORToothFairy UI. Currently, users click a ProfilePage card (e.g., 'Individuals & Families'), it becomes transparent, and ClientProfile accordions appear inside the card. When they expand an accordion, they see a description of their use case.
-The search component has 3 input methods (geolocation, zip, address) plus a radius selector. Each ClientProfile has properties like DefaultSearchType and HighlightColor to guide users toward the recommended search method.
-Where should the search appear? Options I'm considering:
+#### Cleanup
+- [x] Removed ProfilePage/ClientProfile entities (over-engineered for MVP)
+- [x] Removed old Search.razor
+- [x] Consolidated CSS with `if-` and `bf-` prefixes
 
-Inside the selected card below the accordions
-As a separate section below all cards
-Something else?
+---
 
-I want minimal friction - users should quickly understand this is a search app, not get lost in profile selection. Attach screenshots if it helps."
-(If you can grab screenshots of your current UI, that'll make the conversation way faster)"
-
-and remember 
-dotnet build -f net9.0-windows10.0.19041.0
-dotnet run -f net9.0-windows10.0.19041.0
-
-### Results Display
-- [ ] Practitioner card component for results
-- [ ] Order results by distance (closest first)
-- [ ] Display 2-3 service tags/icons per practitioner (no filter yet)
-- [ ] Cards show: name, distance, services, contact info
-#### Practitioner Card Polish
-- [ ] nice box
-- [ ] add services offered, 
-- [x] Integrate link to open address in Maps
-- [ ] Other stuff you haven't written yet
-- [ ] **Commit:** make it like a nice business card (but a web one)
-
-## Testing & Polish
-- [ ] Test profile swapping on each page
-- [ ] Verify search defaults change based on selected profile
-- [ ] Test distance ordering in results
-- [ ] Responsive design check (mobile, tablet, desktop)
-- [ ] Color contrast check for HighlightColor boxes
-- [ ] Demo mode: toggle IsActive flags to show different profile combinations
-- [ ] wtf that sticky `An unhandled error has occurred. Reload 🗙`
-
-## Nice-to-Haves (Post-MVP)
-- Service filter UI
-- UserStories entity table (if comma-delimited becomes unwieldy)
-- SearchPreferencesJson for complex future preferences
-- Profile analytics tracking
-- Note V2.0 features while you remember them like 1) filter by practitioner services, 2) integrate number of miles practitioner willing to travel into search return logic, 3) feedback on list return fairness
-- remember a client's last "profile" and select that on return
+### Post-MVP / Future
+- [ ] Services filter (need hygienist feedback on categories)
+- [ ] Legal page (Terms of Service, Privacy Policy)
+- [ ] API endpoint to capture business interest form
+- [ ] API endpoint to track favorite/bench counts (analytics)
+- [ ] Responsive design polish (test on actual devices)
+- [ ] "For Hygienists" registration flow
+- [ ] Remember user's last path (B2C vs B2B) for return visits
 
 ### Milestone 5: Admin Tools (Week 6, ~10 hours)
 - [?] Create CSV upload script (command-line is fine) - **rethink this**
