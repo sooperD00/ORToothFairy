@@ -47,8 +47,6 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await SeedData.SeedPractitioners(context);
-    await SeedData.SeedProfilePages(context);      // Add this BEFORE ClientProfiles because of FK
-    await SeedData.SeedClientProfiles(context);
 }
 
 // Configure the HTTP request pipeline
