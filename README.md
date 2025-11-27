@@ -81,7 +81,7 @@ Source: 13+ years building distributed systems and real-time analytics at Intel.
 
 | Home | Search Results | B2B Flow |
 |------|----------------|----------|
-| ![Home](docs/screenshots/home.png) | ![Results](docs/screenshots/results.png) | ![B2B](docs/screenshots/b2b.png) |
+| ![Home](docs/screenshots/home.PNG) | ![Results](docs/screenshots/results.PNG) | ![B2B](docs/screenshots/b2b.PNG) |
 
 ---
 
