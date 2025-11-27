@@ -149,6 +149,13 @@
     font-style: italic;
 }
 
+/* entire-screen overlay used to close the hamburger menu off-click */
+.hamburger-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+}
+
 /* ============================================
    About Page
    ============================================ */
