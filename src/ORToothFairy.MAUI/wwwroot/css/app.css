@@ -1,4 +1,30 @@
-﻿/* ============================================
+﻿
+/* ============================================
+   Blazor Error UI Expects This - Keep from Template
+   ============================================ */
+#blazor-error-ui {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    background: #ffee58;
+    color: #333;
+    text-align: center;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        margin-left: 1rem;
+    }
+
+.status-bar-safe-area {
+    height: env(safe-area-inset-top);
+}
+
+/* ============================================
    Main Layout
    ============================================ */
 .app-layout {
