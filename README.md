@@ -165,20 +165,6 @@ dotnet run  # Runs on https://localhost:5001
 cd src/ORToothFairy.MAUI
 dotnet run -f net9.0-windows10.0.19041.0
 ```
-
----
-
-## 🤔 Why Build This in Public?
-
-**Transparency over secrecy.** My competitive advantages are:
-1. Partner's network (can't clone that)
-2. Domain knowledge (I've done the research)
-3. Actually shipping it (most people don't finish)
-
-The code itself isn't proprietary—it's solid architecture applied to a real problem. **That's what employers want to see.**
-
-If the business succeeds, great. If not, this is still a strong portfolio piece demonstrating senior-level thinking.
-
 ---
 
 ## Contact
