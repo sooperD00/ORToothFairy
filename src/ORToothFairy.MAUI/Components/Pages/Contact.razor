@@ -17,12 +17,14 @@
     <div class="contact-form">
         <div class="form-group">
             <label>Your Name</label>
-            <input type="text" @bind="name" placeholder="Jane Smith" />
+            
+            <!-- Hygienist Easter Egg -->
+            <input type="text" @bind="name" placeholder="@(contactType == "hygienist" ? "Irene Newman" : "Jane Brightsmile")" />
         </div>
 
         <div class="form-group">
             <label>Your Email</label>
-            <input type="email" @bind="email" placeholder="jane@example.com" />
+            <input type="email" @bind="email" placeholder="@(contactType == "hygienist" ? "since1906@example.com" : "jane@example.com")" />
         </div>
 
         <div class="form-group">
