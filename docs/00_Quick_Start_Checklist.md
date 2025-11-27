@@ -172,49 +172,45 @@
 - [x] Removed old Search.razor
 - [x] Consolidated CSS with `if-` and `bf-` prefixes
 
----
-
-### Post-MVP / Future
-- [ ] Services filter (need hygienist feedback on categories)
-- [ ] Legal page (Terms of Service, Privacy Policy)
-- [ ] API endpoint to capture business interest form
-- [ ] API endpoint to track favorite/bench counts (analytics)
-- [ ] Responsive design polish (test on actual devices)
-- [ ] "For Hygienists" registration flow
-- [ ] Remember user's last path (B2C vs B2B) for return visits
-
-### Milestone 5: Admin Tools (Week 6, ~10 hours)
-- [?] Create CSV upload script (command-line is fine) - **rethink this**
-  - this needs to be re-considered in the design, because it will likely be me and not Cris, so table for now, but redesign soon, maybe not before MVP show-off and first feedbacks though, but as time allows while waiting for feedback
-- [ ] Add search logging to database
-- [ ] Create basic stats query (even if not displayed)
-- [ ] **Deliverable:** Admin can add practitioners via ***undecided interface bc now it's for Nicole to manage, not Cris***
+### Milestone 5: Admin Tools - DEFERRED
+Moved to Post-MVP. Initial demo will use seeded test data; admin tooling will be designed after collecting hygienist feedback on data requirements.
 
 ### Milestone 6: Polish & Deploy (Week 7-8, ~15 hours)
-- [ ] Error handling & loading states
-- [ ] Responsive design polish
+- [x] Error handling & loading states (spinners, error UI CSS fixed)
+- [x] Hamburger menu consolidation (overlay close, divider, external link icons)
+- [x] Copy polish (EPP explanation, placeholder names, menu labels)
+- [ ] Responsive design polish (test on actual devices)
+- [ ] Verify lat/lon precision (6 decimals for ~1cm accuracy)
 - [ ] Add integration tests
-- [ ] Check the Spinner in the UI while "waiting"
-- [ ] Fix plural on MAUI razor "1 practitioner**s** found"
-- [ ] make sure you have 6 decimals for the lat/lon for accuracy within 1cm
-- [ ] show "Accepts Calls", "Accepts Texts", and "Services" list in UI results
 - [ ] Performance testing
-- [ ] Write README & API docs - this is a real project now, not a portfolio project. The "learnings" have to go - I want it 100% professional but also good and readable documentation for myself and all those --verbose engineers who are allowed to sit at my lunch table but who also can't sit through lunch (or read a novel of a document) because there's more fun stuff to do - it's a tight balance
+- [ ] Write Terms of Service & Privacy Policy (visible in menu as "coming soon")
+- [ ] Write README & API docs (professional but readable)
 - [ ] Deploy to production (Azure)
 - [ ] Submit to app stores (if ready)
 - [ ] **Deliverable:** Production v1.0 live!
 
 ---
 
-## 📱 Phase 5: Launch & Iterate (FUTURE)
-
+## 📱 Phase 5: Launch & Iterate (December)
 - [ ] Get 5-10 test practitioners to try it
 - [ ] Collect feedback
 - [ ] Fix bugs
-- [ ] Market to "Oregon Dental Hygenists Association" members (with Cris)
+- [ ] Market to ODHA members (with Cris)
 - [ ] Monitor usage stats
 - [ ] Plan v2 features based on data
 
+### Post-MVP / Future Notes
+- [ ] Services filter (need hygienist feedback on categories)
+- [ ] API endpoint to capture business interest form
+- [ ] API endpoint to track favorite/bench counts (analytics)
+- [ ] "For Hygienists" dedicated page (currently uses contact?type=hygienist)
+- [ ] Remember user's last path (B2C vs B2B) for return visits
+- [ ] **Milestone X**: Admin Tools (Deferred from MVP, ~10 hours)
+  - [ ] Create practitioner data entry flow (for Nicole, not Cris)
+  - CSV upload or simple form TBD — revisit after MVP feedback
+  - [ ] Add search logging to database
+  - [ ] Create basic stats query (even if not displayed)
+  - [ ] **Deliverable:** Admin can add practitioners via TBD interface
 ---
 
 ## Quick Reference: Tech Stack
@@ -242,8 +238,9 @@ dotnet run
 
 # Run MAUI app
 cd src/ORToothFairy.MAUI
-dotnet build -t:Run -f net8.0-android  # Android
-dotnet build -t:Run -f net8.0-ios      # iOS (Mac only)
+dotnet build -t:Run -f net9.0-android  # Android
+dotnet build -t:Run -f net9.0-ios      # iOS (Mac only)
+dotnet run -f net9.0-windows10.0.19041.0 # run without Android
 ```
 
 ### Database Migrations

@@ -1,62 +1,87 @@
 # OR Tooth Fairy
 
-> ⚠️ **Work in Progress** — Building in public to demonstrate modern .NET architecture, product planning, and real-world problem solving.
-
-**Connecting Oregon patients with independent dental hygienists (EDHS practitioners).**
-
-**Why "Tooth Fairy"?** Many EDHS practitioners call themselves tooth fairies—they bring dental care to underserved communities like nursing homes, schools, and low-income populations. But patients can't find them. This app fixes that.
+**Connecting Oregonians with dental hygienists — in homes, care facilities, and communities.**
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/)
 [![MAUI](https://img.shields.io/badge/MAUI-Latest-blue)](https://dotnet.microsoft.com/apps/maui)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
----
+## Project Status: MVP Complete — Collecting Feedback
 
-## 🎯 Why This Project Exists
+The app is feature-complete for initial demos. Currently gathering feedback from Oregon dental hygienists to inform data structures and admin tooling.
 
-### The Business Problem
-Oregon has ~400 Expanded Practice Dental Hygienists (EDHS) who can provide dental care independently—but patients can't find them. Google doesn't work, no directory exists, and practitioners lose business. I'm partnering with a dental hygienist union ED to test if a simple finder app can solve this (and generate modest revenue at $15/practitioner/month).
-
-### The Portfolio Goal
-I'm transitioning from semiconductor manufacturing engineering to software development, targeting senior IC and data/engineering manager roles. **This project demonstrates:**
-
-- **Greenfield architecture planning** (see `/docs/02_Requirements_And_Planning.md` for detailed technical specs)
-- **Business-to-technical translation** (market research → database schema → API design)
-- **Risk management** (MVP scope, "leave room for" future features, exit strategies)
-- **Modern .NET skills** (.NET MAUI, ASP.NET Core, EF Core, PostGIS)
-- **Real-world execution** (not a tutorial—actual constraints, trade-offs, deployment)
-
-**📁 Start in `/docs/`** to see how I validated the problem and planned the solution before writing code. The requirements doc is particularly detailed.
-
-**🚧 Current Status:** Legal/business setup phase (LLC structure, ToS/Privacy). Milestone 1 (project scaffolding) starts next.
+| What's Done | What's Next |
+|-------------|-------------|
+| ✅ Location-based search (GPS, zip, address) | Deploy to production (Azure) |
+| ✅ Distance filtering | Hygienist demos & feedback |
+| ✅ B2C flow (individuals & families) | Iterate on services/data model |
+| ✅ B2B flow (businesses & facilities) | App store submission |
+| ✅ Contact flows (general + hygienist signup) | Admin tools (post-feedback) |
 
 ---
 
-## 🦷 What is EDHS?
+## What is ORToothFairy?
 
-Expanded Practice Dental Hygienists in Oregon can provide preventive dental care independently in underserved settings (nursing homes, schools, low-income populations). They're licensed, skilled, and needed—but invisible to the patients who need them most.
+Oregon dental hygienists can practice in settings beyond traditional dental offices — homes, nursing facilities, schools, community health centers. But there's no way to find them. ORToothFairy fixes that.
 
-**This app is Yelp for independent dental hygienists.** Simple, focused, solves a real problem.
+**For individuals & families:** Find hygienists who make house calls or work in your community.
+
+**For businesses & facilities:** Find hygienists for staffing — full-time, part-time, coverage, or emergency fill-ins.
+
+**For hygienists:** Get discovered by patients and organizations who need you.
+
+This is a real product built in partnership with the Oregon Dental Hygienists' Association, with planned monetization ($15/month practitioner listings, B2B subscription tiers).
 
 ---
 
-## ✨ MVP Features (8-week build)
+## Skills Demonstrated
 
-### For Patients
-- 🔍 Search by location (geolocation, zip, or address)
-- 📏 Distance filtering (5/10/20 miles or show all)
-- 📱 Tap to call/email practitioners directly
-- 🗺️ Map view with pins
-- 📱 Native mobile (iOS/Android) + web from single codebase
+This isn't a tutorial project — it's a functioning product with real users pending. That said, it showcases:
 
-### For Practitioners
-- 📝 Simple listing (contact info, services, license verification)
-- 🎯 Patient discovery (currently impossible)
-- 💰 Affordable ($15/month subscription)
+| Area | What's Here |
+|------|-------------|
+| **Architecture** | Greenfield design: requirements → schema → API → UI |
+| **Geospatial** | Location search with distance calculations, geocoding |
+| **Cross-platform** | .NET MAUI Blazor Hybrid (Windows, iOS, Android from one codebase) |
+| **Product thinking** | B2C and B2B flows, user research, MVP scoping |
+| **Shipped** | Not a WIP — working app ready for user feedback |
 
-### For Admins (Manual for MVP)
-- ✅ License verification via CSV
-- 📊 Usage logging (no dashboard yet—see `/docs/future-features/analytics-dashboard.md`)
+Source: 13+ years building distributed systems and real-time analytics at Intel.
+
+---
+
+## Features
+
+### For Individuals & Families
+- 🔍 Search by GPS, zip code, or address
+- 📏 Distance filtering (5/10/25/50 miles)
+- 📱 Tap to call, text, or email practitioners
+- ❤️ Save favorites locally
+
+### For Businesses & Facilities
+- 🏥 Same search, tailored messaging
+- 📋 Staffing type selector (full-time, part-time, coverage, emergency)
+- ⭐ Build a "bench" of preferred hygienists
+- 📝 Interest capture for premium features
+
+### For Hygienists
+- 📍 Get listed and discovered
+- 📞 Direct patient contact (no middleman)
+- 🏷️ Service and location visibility
+
+### Planned: Admin & Analytics
+- Search logging and usage stats
+- Registration approval workflow
+- Favorite/bench aggregate analytics
+- Services filter (pending hygienist feedback on categories)
+
+---
+
+## Screenshots
+
+| Home | Search Results | B2B Flow |
+|------|----------------|----------|
+| ![Home](docs/screenshots/home.png) | ![Results](docs/screenshots/results.png) | ![B2B](docs/screenshots/b2b.png) |
 
 ---
 
@@ -64,12 +89,12 @@ Expanded Practice Dental Hygienists in Oregon can provide preventive dental care
 
 | Component | Choice | Why |
 |-----------|--------|-----|
-| **Backend** | ASP.NET Core 8.0 Web API | Modern, async, great for resume |
-| **Frontend** | .NET MAUI (Blazor Hybrid) | Single codebase → web + iOS + Android |
-| **Database** | PostgreSQL + PostGIS | Geospatial queries (distance calculations) |
+| **Backend** | ASP.NET Core 9.0 Web API | Modern, async, production-ready |
+| **Frontend** | .NET MAUI (Blazor Hybrid) | Single codebase → Windows, iOS, Android |
+| **Database** | SQLite (MVP) → PostgreSQL + PostGIS | Start simple, migrate when needed |
 | **ORM** | Entity Framework Core | Type-safe, migrations, LINQ |
-| **Maps** | Mapbox / Google Maps | Standard integrations |
-| **Hosting** | Azure App Service + Railway | Learn cloud deployment, ~$30/mo |
+| **Geocoding** | Nominatim (OpenStreetMap) | Free, no API key for MVP |
+| **Hosting** | Azure App Service (planned) | ~$30/mo at scale |
 
 **Why this stack?**
 - Portfolio-friendly (in-demand skills)
@@ -81,101 +106,72 @@ See `/docs/02_Requirements_And_Planning.md` → **Section: Tech Stack Selection*
 
 ---
 
-## 📊 Project Philosophy: "Leave Room For"
+## 🗺️ Roadmap
 
-**Key architectural principle:** Structure the codebase to support future features WITHOUT building them in MVP.
+### ✅ Phase 1-2: Discovery & Planning (Complete)
+Market validation, user research, tech decisions → [See docs/](docs/)
 
-**Why?** Shows employers I can:
-- Plan for scale without over-engineering
-- Balance scope vs. quality
-- Think about maintainability
+### ✅ Phase 3: Legal Setup (Complete)
+LLC structure, Terms/Privacy Policy in progress
 
-**Examples:**
-- Empty `/docs/future-features/` folder with specs for admin panel, notifications, analytics (not built, but planned)
-- Database schema includes future tables (commented out in migrations)
-- API has stubbed endpoints for v2 features
-- Logging infrastructure captures data we'll analyze later
+### ✅ Phase 4: MVP Development (Complete)
+- **M1-4:** Core search, MAUI UI, geolocation, contact flows ✅
+- **M5:** Admin Tools — DEFERRED (will design after hygienist feedback)
+- **M6:** Polish & Deploy — IN PROGRESS
 
-This is how real teams work—ship MVP, learn, iterate. Not "build everything upfront."
+### 🔄 Phase 5: Launch & Iterate (Current)
+- [ ] Deploy to production
+- [ ] Demo to 5-10 hygienists
+- [ ] Collect feedback on services/data model
+- [ ] ODHA outreach (with Cris)
 
----
-
-## 🗺️ Current Roadmap
-
-### ✅ Phase 1: Discovery (Complete)
-Market validation, user research, tech decisions → [See docs/01_Discovery.md](docs/01_Discovery.md)
-
-### ✅ Phase 2: Planning (Complete)
-Database schema, API design, 8-week milestone breakdown → [See docs/02_Requirements_And_Planning.md](docs/02_Requirements_And_Planning.md)
-
-### 🔄 Phase 3: Legal Setup (In Progress)
-LLC structure, Terms/Privacy Policy → [See docs/03_Legal_Business_Setup.md](docs/03_Legal_Business_Setup.md)
-
-### 🚧 Phase 4: MVP Development (Next — 8 weeks)
-- **M1:** Solution setup, migrations, hello-world deploy (Week 1)
-- **M2:** Core search logic, distance calculations (Week 2-3)
-- **M3:** MAUI UI, search/results pages (Week 3-4)
-- **M4:** Maps integration (Week 5)
-- **M5:** Admin CSV tools (Week 6)
-- **M6:** Polish, deploy, beta test (Week 7-8)
-
-### 📅 Phase 5: Launch (Week 9-10)
-Beta with 5-10 practitioners, app store submission, union outreach
-
-### 🔮 Future (If Successful)
-See `/docs/future-features/` for detailed specs on admin panel, push notifications, analytics, multi-state expansion.
+### 📮 Post-MVP
+- Services filter (pending hygienist feedback)
+- Admin tooling (registration approval flow)
+- Analytics endpoints
+- Multi-state expansion (if Oregon succeeds)
 
 ---
 
 ## 📁 Repository Structure
 ```
-EDHSFinder/
+ORToothFairy/
 ├── docs/
-│   ├── 01_Discovery.md              # ⭐ Start here — problem validation
-│   ├── 02_Requirements_And_Planning.md  # ⭐ Then here — technical specs
-│   ├── 03_Legal_Business_Setup.md
-│   └── future-features/             # Planned but not built (shows foresight)
+│   ├── 01_Discovery.md
+│   ├── 02_Requirements_And_Planning.md
+│   └── 03_Legal_Business_Setup.md
 ├── src/
-│   ├── EDHSFinder.API/              # ASP.NET Core backend (not built yet)
-│   ├── EDHSFinder.Core/             # Shared domain logic
-│   └── EDHSFinder.MAUI/             # Frontend (mobile + web)
-├── tests/
-└── scripts/
+│   ├── ORToothFairy.API/          # ASP.NET Core backend
+│   ├── ORToothFairy.Core/         # Shared domain logic
+│   └── ORToothFairy.MAUI/         # Blazor Hybrid frontend
+└── tests/
 ```
 
-**👀 For hiring managers:** Check out the `/docs` folder first. The planning process is more impressive than the code (for now).
+**👀 For hiring managers:** Check out my planning process in `/docs` folder.
 
 ---
 
-## 🚀 Quick Start (Once Code Exists)
+## 🚀 Quick Start
 ```bash
 # Clone
-git clone https://github.com/sooperD00/EDHSFinder.git
-cd EDHSFinder
+git clone https://github.com/sooperD00/ORToothFairy.git
+cd ORToothFairy
 
-# Setup database (PostgreSQL + PostGIS)
-docker run --name edhsfinder-db -e POSTGRES_PASSWORD=dev -p 5432:5432 -d postgis/postgis:15-3.3
-
-# Run migrations
-cd src/EDHSFinder.API
-dotnet ef database update
-
-# Start API
+# Run API
+cd src/ORToothFairy.API
 dotnet run  # Runs on https://localhost:5001
 
 # Run MAUI app (separate terminal)
-cd src/EDHSFinder.MAUI
-dotnet build -t:Run -f net8.0-android  # Or net8.0-ios, net8.0-windows
+cd src/ORToothFairy.MAUI
+dotnet run -f net9.0-windows10.0.19041.0
 ```
-
-*(Not yet implemented—check back in 2 weeks)*
 
 ---
 
 ## 🤔 Why Build This in Public?
 
 **Transparency over secrecy.** My competitive advantages are:
-1. Partner's union network (can't clone that)
+1. Partner's network (can't clone that)
 2. Domain knowledge (I've done the research)
 3. Actually shipping it (most people don't finish)
 
@@ -185,14 +181,15 @@ If the business succeeds, great. If not, this is still a strong portfolio piece 
 
 ---
 
-## 💬 Contact & Collaboration
+## Contact
 
-- **Developer:** Nicole Rowsey
-- **Email:** nicole.rowsey@gmail.com
-- **LinkedIn:** [linkedin.com/in/nicolerowsey](https://linkedin.com/in/nicolerowsey) *(update with real link)*
-- **Other Projects:** [github.com/sooperD00](https://github.com/sooperD00)
+**Nicole Rowsey** — Staff Data Platform Engineer | Distributed Systems | Real-Time Analytics | PhD EE
 
-Currently job searching (senior IC / engineering manager roles in data/software). Open to discussing this project or others.
+- 📧 nicole.rowsey@gmail.com
+- 💼 [LinkedIn](https://linkedin.com/in/nicolerowsey)
+- 💻 [GitHub](https://github.com/sooperD00)
+
+Open to senior/staff IC roles in data engineering and platform work. Happy to discuss this project or others.
 
 ---
 
