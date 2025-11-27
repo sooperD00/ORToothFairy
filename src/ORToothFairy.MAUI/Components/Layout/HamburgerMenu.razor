@@ -5,14 +5,24 @@
     <button class="hamburger-btn" @onclick="Toggle">☰</button>
     @if (isOpen)
     {
+        <!-- Overlay for Deselect offclick -->
         <div class="hamburger-overlay" @onclick="Toggle"></div>
+        
+        <!-- Hamburger Nav Contents -->
         <div class="hamburger-dropdown">
+            @* Internal links *@
+            <a href="/about">About</a>
             <a href="/about#how-it-works">How It Works</a>
             <a href="/contact">Contact Us</a>
-            <a href="/contact?type=hygienist">Hygienist Sign Up</a>
-            <a href="https://www.odha.org/" target="_blank">Oregon Dental Hygienists Assoc. (ODHA)</a>
-            <a href="https://www.oregon.gov/oha/hsd/ohp/pages/apply.aspx" target="_blank">Oregon Health Plan (Medicaid)</a>
-            <span class="menu-placeholder">Cris's Podcast (Coming Soon!)</span>
+            <a href="/contact?type=hygienist">For Hygienists</a>
+            <span class="menu-placeholder">Terms & Privacy (Coming Soon)</span>
+    
+            <div class="menu-divider"></div>
+    
+            @* External links *@
+            <a href="https://www.odha.org/" target="_blank">ODHA ↗</a>
+            <a href="https://www.oregon.gov/oha/hsd/ohp/pages/apply.aspx" target="_blank">Oregon Health Plan ↗</a>
+            <span class="menu-placeholder">Cris's Podcast (Coming Soon)</span>
         </div>
     }
 </div>

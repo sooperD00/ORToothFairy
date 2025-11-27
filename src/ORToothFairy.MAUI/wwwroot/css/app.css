@@ -141,12 +141,19 @@
             background: #f5f5f5;
         }
 
-/* Cris's placeholder styling inside the hamburger */
+/* "Coming Soon" placeholder styling inside the hamburger */
 .menu-placeholder {
     display: block;
     padding: 0.5rem 1rem;
     color: #999;
     font-style: italic;
+}
+
+/* divider between internal and external links in the hamburger */
+.menu-divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 0.5rem 0;
 }
 
 /* entire-screen overlay used to close the hamburger menu off-click */
