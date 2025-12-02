@@ -5,8 +5,8 @@ docs/CONTEXT_FOR_CLAUDE.md
 docs/*.txt
 
 # Hidden to keep the railway DATABASE_PUBLIC_URL variable private
-appsettings.json
-appsettings.*.json
+**/appsettings.json
+**/appsettings.*.json
 
 ## Standard GitHub Visual Studio File
 ## -------------------------------------------
