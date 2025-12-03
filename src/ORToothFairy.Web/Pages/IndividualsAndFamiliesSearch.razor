@@ -1,0 +1,385 @@
+@page "/individuals-and-families"
+@inject SearchApiClient SearchApi
+@inject IJSRuntime JS
+
+<div class="if-search-page">
+    <div class="if-hero" style="background-image: url('images/nathan-anderson-GM5Yn5XRVqA-unsplash.jpg');">
+        <div class="if-hero-overlay"></div>
+        
+        <div class="if-hero-content">
+            <h1>Find a Dental Hygienist</h1>
+            
+            <div class="if-triage-card">
+                <p class="if-triage-intro">
+                    Oregon dental hygienists can provide preventive care in many settings — 
+                    not just dental offices. Search below to find hygienists who:
+                </p>
+                <ul class="if-triage-list">
+                    <li>🏠 Make house calls for you or a family member</li>
+                    <li>🏥 Visit nursing homes and care facilities</li>
+                    <li>🦷 Work at dental offices you can visit directly</li>
+                    <li>🏛️ Serve community health centers in underserved areas</li>
+                </ul>
+                <p class="if-triage-cta">
+                    <strong>How it works:</strong> Search by location, browse results, 
+                    then contact a hygienist or their facility directly to schedule.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="if-search-section">
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="if-error">
+                <p>⚠️ @errorMessage</p>
+            </div>
+        }
+
+        <div class="if-search-controls">
+            <h2>Search by Location</h2>
+
+            <button class="if-btn-primary" @onclick="UseMyLocation">
+                📍 Use My Location
+            </button>
+
+            <div class="if-search-divider">
+                <span>or</span>
+            </div>
+
+            <div class="if-input-row">
+                <input type="text"
+                       @bind="zipCode"
+                       @bind:event="oninput"
+                       @onkeypress="HandleZipKeyPress"
+                       placeholder="Enter zip code (e.g., 97124)"
+                       maxlength="5" />
+                <button class="if-btn-secondary" @onclick="SearchByZip">Search</button>
+            </div>
+
+            <div class="if-input-row">
+                <input type="text"
+                       @bind="address"
+                       @bind:event="oninput"
+                       @onkeypress="HandleAddressKeyPress"
+                       placeholder="Or enter address" />
+                <button class="if-btn-secondary" @onclick="SearchByAddress">Search</button>
+            </div>
+
+            <div class="if-filters">
+                <div class="if-filter-item">
+                    <label>Distance:</label>
+                    <select @bind="maxDistance" @bind:after="OnDistanceChanged">
+                        <option value="5">5 miles</option>
+                        <option value="10">10 miles</option>
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                        <option value="999999">All</option>
+                    </select>
+                </div>
+
+                <div class="if-filter-item if-filter-coming-soon">
+                    <label>Services:</label>
+                    <select disabled>
+                        <option>All services</option>
+                    </select>
+                    <span class="if-coming-soon-badge">Coming soon</span>
+                </div>
+            </div>
+        </div>
+
+        @if (isLoading)
+        {
+            <div class="if-loading">
+                <div class="if-spinner"></div>
+                <p>Searching for practitioners...</p>
+            </div>
+        }
+
+        @if (!isLoading && results != null && results.Any())
+        {
+            <div class="if-results">
+                <h2 class="if-results-count">@results.Count hygienist@(results.Count != 1 ? "s" : "") found</h2>
+
+                <div class="if-results-grid">
+                    @foreach (var practitioner in results)
+                    {
+                        <div class="if-practitioner-card">
+                            <div class="if-card-header">
+                                <h3>@practitioner.FirstName @practitioner.LastName</h3>
+                                <div class="if-card-header-right">
+                                    <button class="if-favorite-btn" @onclick="() => ToggleFavorite(practitioner.PractitionerId)" @onclick:stopPropagation="true">
+                                        @(IsFavorite(practitioner.PractitionerId) ? "❤️" : "🤍")
+                                    </button>
+                                    <span class="if-card-distance">
+                                        @practitioner.UserPractitionerProximityMiles.ToString("F1") mi
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p class="if-card-location">
+                                @practitioner.City, @practitioner.ZipCode
+                            </p>
+
+                            @if (practitioner.Services != null && practitioner.Services.Any())
+                            {
+                                <div class="if-card-services">
+                                    @foreach (var service in practitioner.Services.Take(4))
+                                    {
+                                        <span class="if-service-chip">@service</span>
+                                    }
+                                    @if (practitioner.Services.Count > 4)
+                                    {
+                                        <span class="if-service-chip if-service-more">+@(practitioner.Services.Count - 4) more</span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="if-card-actions">
+                                @if (practitioner.AcceptsCalls && !string.IsNullOrEmpty(practitioner.Phone))
+                                {
+                                    <a href="tel:@practitioner.Phone" class="if-action-btn if-action-call">
+                                        📞 Call
+                                    </a>
+                                }
+                                @if (practitioner.AcceptsTexts && !string.IsNullOrEmpty(practitioner.Phone))
+                                {
+                                    <a href="sms:@practitioner.Phone" class="if-action-btn if-action-text">
+                                        💬 Text
+                                    </a>
+                                }
+                                @if (!string.IsNullOrEmpty(practitioner.Email))
+                                {
+                                    <a href="mailto:@practitioner.Email" class="if-action-btn if-action-email">
+                                        ✉️ Email
+                                    </a>
+                                }
+                                <a href="https://maps.google.com/?daddr=@practitioner.Latitude,@practitioner.Longitude" 
+                                   target="_blank" 
+                                   class="if-action-btn if-action-directions">
+                                    🗺️ Directions
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (!isLoading && hasSearched && (results == null || !results.Any()))
+        {
+            <div class="if-empty-state">
+                @if (maxDistance < 999999)
+                {
+                    <p>No hygienists found within @maxDistance miles.</p>
+                    <p>Try increasing the distance filter above.</p>
+                }
+                else
+                {
+                    <p>No hygienists found in this area.</p>
+                    <p>
+                        Contact the <a href="https://www.odha.org" target="_blank">Oregon Dental Hygienists' Association</a> 
+                        for help finding care.
+                    </p>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private string zipCode = "";
+    private string address = "";
+    private int maxDistance = 25;
+    private bool isLoading = false;
+    private bool hasSearched = false;
+    private string? errorMessage;
+
+    private List<PractitionerSearchResult>? results;
+    private string lastZipCode = "";
+    private string lastAddress = "";
+    private double? lastLat;
+    private double? lastLon;
+    private HashSet<int> favoritePractitionerIds = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFavorites();
+    }
+
+    private async Task UseMyLocation()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            StateHasChanged();
+
+            var location = await JS.InvokeAsync<GeoLocation?>("browserInterop.getCurrentPosition");
+
+            if (location == null)
+            {
+                errorMessage = "Unable to get your location. Please allow location access or use zip code/address.";
+                return;
+            }
+
+            lastLat = location.Latitude;
+            lastLon = location.Longitude;
+            lastZipCode = "";
+            lastAddress = "";
+
+            results = await SearchApi.SearchByCoordinatesAsync(location.Latitude, location.Longitude, maxDistance);
+            hasSearched = true;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error getting location: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SearchByZip()
+    {
+        if (string.IsNullOrWhiteSpace(zipCode) || zipCode.Length != 5)
+        {
+            errorMessage = "Please enter a valid 5-digit zip code.";
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            hasSearched = true;
+            lastZipCode = zipCode;
+            lastAddress = "";
+            lastLat = null;
+            lastLon = null;
+            StateHasChanged();
+
+            results = await SearchApi.SearchByZipCodeAsync(zipCode, maxDistance);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Search failed: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SearchByAddress()
+    {
+        if (string.IsNullOrWhiteSpace(address))
+        {
+            errorMessage = "Please enter an address.";
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            hasSearched = true;
+            lastAddress = address;
+            lastZipCode = "";
+            lastLat = null;
+            lastLon = null;
+            StateHasChanged();
+
+            results = await SearchApi.SearchByAddressAsync(address, maxDistance);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Search failed: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnDistanceChanged()
+    {
+        if (!hasSearched) return;
+
+        if (!string.IsNullOrEmpty(lastZipCode))
+        {
+            zipCode = lastZipCode;
+            await SearchByZip();
+        }
+        else if (!string.IsNullOrEmpty(lastAddress))
+        {
+            address = lastAddress;
+            await SearchByAddress();
+        }
+        else if (lastLat.HasValue && lastLon.HasValue)
+        {
+            try
+            {
+                isLoading = true;
+                StateHasChanged();
+                results = await SearchApi.SearchByCoordinatesAsync(lastLat.Value, lastLon.Value, maxDistance);
+            }
+            finally
+            {
+                isLoading = false;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task HandleZipKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchByZip();
+    }
+
+    private async Task HandleAddressKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchByAddress();
+    }
+
+    private async Task LoadFavorites()
+    {
+        try
+        {
+            var stored = await JS.InvokeAsync<string?>("browserInterop.getItem", "favorite_practitioners");
+            if (!string.IsNullOrEmpty(stored))
+            {
+                favoritePractitionerIds = stored.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToHashSet();
+            }
+        }
+        catch { }
+    }
+
+    private async Task ToggleFavorite(int practitionerId)
+    {
+        if (favoritePractitionerIds.Contains(practitionerId))
+            favoritePractitionerIds.Remove(practitionerId);
+        else
+            favoritePractitionerIds.Add(practitionerId);
+
+        try
+        {
+            await JS.InvokeVoidAsync("browserInterop.setItem", "favorite_practitioners", string.Join(",", favoritePractitionerIds));
+        }
+        catch { }
+
+        StateHasChanged();
+    }
+
+    private bool IsFavorite(int practitionerId) => favoritePractitionerIds.Contains(practitionerId);
+
+    private class GeoLocation
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}

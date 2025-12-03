@@ -1,7 +1,119 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<div class="home-page">
+    <div class="home-hero">
+        <h1>🦷 ORToothFairy</h1>
+        <p class="home-tagline">Connecting Oregonians with dental hygienists</p>
+        
+        <div class="home-cta-group">
+            <a href="/individuals-and-families" class="home-cta-primary">
+                🏠 I'm looking for a hygienist
+            </a>
+            <a href="/businesses-and-facilities" class="home-cta-secondary">
+                🏥 I'm a business/facility
+            </a>
+        </div>
+    </div>
 
-<h1>Hello, world!</h1>
+    <div class="home-info">
+        <h2>What is this?</h2>
+        <p>
+            Oregon dental hygienists can provide preventive care in many settings beyond 
+            traditional dental offices — homes, nursing facilities, schools, and community 
+            health centers. But there's no easy way to find them.
+        </p>
+        <p>
+            <strong>ORToothFairy fixes that.</strong>
+        </p>
 
-Welcome to your new app.
+        <h2>Are you a hygienist?</h2>
+        <p>
+            Get discovered by patients and organizations who need you.
+            <a href="/contact">Contact us</a> to get listed.
+        </p>
+    </div>
+</div>
+
+<style>
+    .home-page {
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .home-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .home-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .home-tagline {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .home-cta-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .home-cta-primary, .home-cta-secondary {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        text-align: center;
+        transition: transform 0.2s;
+    }
+
+    .home-cta-primary:hover, .home-cta-secondary:hover {
+        transform: translateY(-2px);
+    }
+
+    .home-cta-primary {
+        background: white;
+        color: #667eea;
+    }
+
+    .home-cta-secondary {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 2px solid white;
+    }
+
+    .home-info {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    .home-info h2 {
+        color: #333;
+        margin-top: 2rem;
+    }
+
+    .home-info p {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .home-info a {
+        color: #667eea;
+    }
+
+    @@media (min-width: 600px) {
+        .home-cta-group {
+            flex-direction: row;
+            max-width: 500px;
+        }
+    }
+</style>
