@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /source
+
+COPY src/ORToothFairy.Core/*.csproj src/ORToothFairy.Core/
+COPY src/ORToothFairy.Web/*.csproj src/ORToothFairy.Web/
+RUN dotnet restore src/ORToothFairy.Web/ORToothFairy.Web.csproj
+
+COPY src/ORToothFairy.Core/ src/ORToothFairy.Core/
+COPY src/ORToothFairy.Web/ src/ORToothFairy.Web/
+RUN dotnet publish src/ORToothFairy.Web/ORToothFairy.Web.csproj -c Release -o /app
+
+FROM nginx:alpine
+COPY --from=build /app/wwwroot /usr/share/nginx/html
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
