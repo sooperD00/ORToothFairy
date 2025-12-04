@@ -1,0 +1,101 @@
+﻿@page "/about"
+
+<div class="about-container">
+    <h1>About ORToothFairy</h1>
+
+    <p>
+        ORToothFairy connects Oregonians with dental hygienists — whether you need
+        care at home, at a facility, or just want to find someone great nearby.
+    </p>
+
+    <h2>Why This Exists</h2>
+    <p>
+        Oregon dental hygienists can practice independently under an Extended Practice
+        Permit, bringing preventive care to homes, schools, care facilities, and
+        community centers. But there's never been an easy way to find them — until now.
+    </p>
+
+    <h2>Who We Serve</h2>
+    <p>
+        Families looking for convenient care. Care facilities needing on-site services.
+        Dental practices seeking coverage. We help you find the right match.
+    </p>
+
+    <div id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+                <strong>Choose your path</strong>
+                <p>From the home page, select the card that fits - care seeker or staffing.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+                <strong>Search your area</strong>
+                <p>Use your location, zip code, or address to find hygienists nearby.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+                <strong>Reach out directly</strong>
+                <p>Call, text, or email — you contact hygienists directly to schedule.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Contact</h2>
+    <p>
+        Questions? <a href="mailto:hello@ortoothfairy.com">hello@ortoothfairy.com</a>
+    </p>
+</div>
+
+<div class="faq-container">
+    <h2>Frequently Asked Questions</h2>
+
+    @foreach (var faq in faqs)
+    {
+        <div class="faq-item" @onclick="() => ToggleFaq(faq.Id)">
+            <div class="faq-question">
+                @faq.Question
+                <span class="faq-icon">@(expandedFaqId == faq.Id ? "−" : "+")</span>
+            </div>
+            @if (expandedFaqId == faq.Id)
+            {
+                <p>@faq.Answer</p>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private int? expandedFaqId = null;
+
+    private List<(int Id, string Question, string Answer)> faqs = new()
+    {
+        (1, "What is an Extended Practice Permit?",
+            "An Extended Practice Permit (EPP) is an Oregon state credential for hygienists who've completed additional training. It allows them to provide preventive care in homes, schools, care facilities, and community settings without needing a dentist on-site."),
+
+        (2, "Is this covered by insurance?",
+            "Many services are covered by Medicare, Medicaid (Oregon Health Plan), and private insurance. Coverage varies by plan — contact the hygienist directly to confirm they accept your insurance."),
+
+        (3, "I run a dental practice. Can I use this to find coverage?",
+            "Yes! Choose \"Business & Facilities\" on the home page to search for hygienists available for full-time, part-time, or temporary coverage. We're building additional tools for practices — sign up for early access after your first search."),
+
+        (4, "I'm a hygienist. How do I get listed?",
+            "We're onboarding hygienists now. Email us at hello@ortoothfairy.com with your name and practice area, and we'll get you set up."),
+
+        (5, "Is this free?",
+            "Searching is always free for individuals and families. Hygienists pay a flat monthly fee to be listed — no per-lead charges, no paying for placement. Businesses get access to additional tools for a subscription fee.")
+    };
+
+    private void ToggleFaq(int id)
+    {
+        expandedFaqId = expandedFaqId == id ? null : id;
+    }
+}
