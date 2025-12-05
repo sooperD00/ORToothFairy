@@ -1,0 +1,26 @@
+name: or-tooth-fairy
+region: sfo
+services:
+  - name: api
+    github:
+      repo: sooperD00/ORToothFairy
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_size_slug: apps-s-1vcpu-0-5gb
+    instance_count: 1
+    envs:
+      - key: ConnectionStrings__DefaultConnection
+        value: "${CONNECTION_STRING}"
+        type: SECRET
+
+  - name: web
+    github:
+      repo: sooperD00/ORToothFairy
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile.web
+    http_port: 8080
+    instance_size_slug: apps-s-1vcpu-0-5gb
+    instance_count: 1
